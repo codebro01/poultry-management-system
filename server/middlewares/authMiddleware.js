@@ -14,13 +14,13 @@ export const authMiddleware = (context) => {
         const decoded = verifyJWT({token});
 
 
-        if(!decoded) return customError('Invalid Token provided', 'UNAUTHORIZED', 401)
+        if(!decoded) throw customError('Invalid Token provided', 'UNAUTHORIZED', 401)
     
     
         return decoded;
     }
     catch(err) {
-        return customError(err.message || 'An error occured identifying user, please try loggin in again!!! ', 'UNAUTHORIZED', 401)
+        throw customError('An error occured identifying user, please try loggin in again!!! ', 'UNAUTHORIZED', 401)
     }
 }
 
@@ -31,7 +31,7 @@ export const authMiddleware = (context) => {
 
 export const RBAC = (user, requiredRole) => {
     if (!user || !user.role || user.role.length < 1) {
-        throw new new GraphQLError('User is definitely no valid!!!!!', {
+        throw new GraphQLError('User is definitely no valid!!!!!', {
             extensions: {code: "UNAUTHORIZED", status: 401}
         });
     }

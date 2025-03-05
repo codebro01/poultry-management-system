@@ -9,8 +9,9 @@ export const attachCookieToResponse = (context, {user}) =>{
     const token = createJWT({payload: user});
     context.res.cookie('token', token, {
         httpOnly: true, 
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "None",
+        // secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "none",
         maxAge: 18000000 // 
     } )
    return token;

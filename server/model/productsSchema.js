@@ -40,7 +40,7 @@ export const PoultryBirds = model("PoultryBirds", PoultryBirdsSchema);
 
 
 const PoultryEggsSchema = new Schema({
-    type: {
+    types: {
         type: String,
         required: true
     },
@@ -56,7 +56,7 @@ const PoultryEggsSchema = new Schema({
         type: [String], 
         required: true
     }
-})
+}, {timestamps: true})
 
 export const PoultryEggs = model('PoultryEggs', PoultryEggsSchema);
 
@@ -66,9 +66,9 @@ const PoultryFeedSchema = new Schema({
         type: String, 
         requred: [true, 'Poultry feed name is required']
     },
-    type: {
+    types: {
         type: String,
-        enum: ['STARTER, GROWER, FINISHER, LAYER'],
+        enum: ['STARTER', 'GROWER', 'FINISHER', 'LAYER'],
         default: 'STARTER'
     }, 
     weight: {
@@ -93,6 +93,6 @@ const PoultryFeedSchema = new Schema({
         type: Boolean, 
         default: true
     }
-})
+}, {timestamps: true})
 
 export const PoultryFeeds = model('PoultryFeed', PoultryFeedSchema);

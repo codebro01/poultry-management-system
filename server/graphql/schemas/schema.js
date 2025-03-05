@@ -71,12 +71,12 @@ export const typeDefs = `#graphql
 
     type Query {
         poultryBirds: [PoultryBirds!]
-        poultryBird(id: ID! ): PoultryBirds!
+        poultryBird(id: ID! ): PoultryBirds
     }
 
     type Mutation {
         addPoultryBird(bird: PoultryBirdInput): PoultryBirds
-        editPoultryBird(edit: EditPoultryBirdInput): PoultryBirds
+        editPoultryBird(id: ID!, edit: EditPoultryBirdInput): PoultryBirds
         deletePoultryBird(id:ID!): [PoultryBirds]
     }
 
@@ -96,14 +96,14 @@ input EditPoultryBirdInput {
     description: String
     age: Int
     healthStatus: HealthStatus
-    weight: String
+    weight: Int
     images: [String!]
 }
 
 
     type PoultryEggs {
         id: ID!
-        type: EggTypes!
+        types: EggTypes!
         pricePerTray: Float!
         stock: Int!
         images: [String!]!
@@ -122,7 +122,7 @@ input EditPoultryBirdInput {
 
     type Mutation {
         addPoultryEgg(egg: AddPoultryEggInput): PoultryEggs!
-        editPoultryEgg(edit: EditPoultryEggInput): PoultryEggs!
+        editPoultryEgg(id: ID!, edit: EditPoultryEggInput): PoultryEggs!
         deletePoultryEgg(id: ID!): [PoultryEggs]
     }
 
@@ -131,7 +131,6 @@ input EditPoultryBirdInput {
         pricePerTray: Float!
         stock: Int!
         images: [String!]!
-        createdAt: String!
     }
     input EditPoultryEggInput {
         types: String
@@ -141,33 +140,33 @@ input EditPoultryBirdInput {
     }
 
     type PoultryFeeds {
-    id: ID!
-    name: String!
-    type: FeedType!
-    weight: Float! # Weight in kg per bag
-    price: Float!
-    stock: Int! # Number of bags available
-    description: String
-    images: [String!]! # Array of image URLs
-    isAvailable: Boolean!
-    createdAt: String!
+        id: ID!
+        name: String!
+        types: FeedType!
+        weight: Float! # Weight in kg per bag
+        price: Float!
+        stock: Int! # Number of bags available
+        description: String
+        images: [String!]! # Array of image URLs
+        isAvailable: Boolean!
+        createdAt: String!
 }
 
     enum FeedType {
-    STARTER
-    GROWER
-    FINISHER
-    LAYER
+        STARTER
+        GROWER
+        FINISHER
+        LAYER
 }
 
-type Query {
-    poultryFeeds: [PoultryFeeds!]!
-    poultryFeed(id: ID!): PoultryFeeds!
-}
+    type Query {
+        poultryFeeds: [PoultryFeeds!]!
+        poultryFeed(id: ID!): PoultryFeeds!
+    }
 
 type Mutation {
     addPoultryFeed(feed: AddFeedsInput): PoultryFeeds!
-    editPoultryFeed(feed: EditFeedsInput): PoultryFeeds!
+    editPoultryFeed(id: ID!, edit: EditFeedsInput): PoultryFeeds!
     deletePoultryFeed(id: ID!): [PoultryFeeds]
 }
 
@@ -176,7 +175,7 @@ type Mutation {
 
 input AddFeedsInput {
     name: String!
-    type: FeedType!
+    types: FeedType!
     weight: Float! # Weight in kg per bag
     price: Float!
     stock: Int! # Number of bags available
@@ -188,7 +187,7 @@ input AddFeedsInput {
 
 input EditFeedsInput {
     name: String
-    type: FeedType
+    types: FeedType
     weight: Float # Weight in kg per bag
     price: Float
     stock: Int! # Number of bags available
