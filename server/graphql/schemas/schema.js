@@ -108,6 +108,8 @@ input EditPoultryBirdInput {
     healthStatus: HealthStatus
     weight: Int
     images: [String!]
+    totalCost: Int!
+
 }
 
 enum eggStatusValue {

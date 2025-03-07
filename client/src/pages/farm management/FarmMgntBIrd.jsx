@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataTable } from '../../components/DataTable';
 import { Typography, Box } from '@mui/material';
 import { useTheme } from '@emotion/react';
@@ -8,37 +8,33 @@ import { GridDeleteIcon } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import Grid from '@mui/material/Grid2'
+import { Button } from "@mui/material";
+import { ReusableForm } from '../../components/formComponent';
+import * as Yup from "yup";
+import axios from 'axios';
+import { EditForm } from '../../components/editFormComponent';
 
 export const FarmMgntBird = () => {
     const theme = useTheme();
+    const [rows, setRows] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [imageUrls, setImagesUrls] = useState([]);
+    const [selectedBird, setSelectedBird] = useState('');
+    const [idtoDelete, setIdToDelete] = useState('');
 
-
-    const handleEdit = (id) => {
-        console.log(`Edit row with ID: ${id}`);
-    };
-
-    const handleDelete = (id) => {
-        console.log(`Delete row with ID: ${id}`);
-    };
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First name', width: 130 },
-        { field: 'lastName', headerName: 'Last name', width: 130 },
-        {
-            field: 'age',
-            headerName: 'Age',
-            type: 'number',
-            width: 90,
-        },
-        {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
-            sortable: true,
-            width: 160,
-            valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-        },
+        { field: 'name', headerName: 'Category', width: 130 },
+        { field: 'totalCost', headerName: 'Total Cost', width: 130 },
+        { field: 'price', headerName: 'Price', width: 130 },
+        { field: 'weight', headerName: 'Weight', width: 130 },
+        { field: 'healthStatus', headerName: 'Health Status', width: 130 },
+
         {
             field: 'Edit',
             headerName: 'Edit',
@@ -46,7 +42,7 @@ export const FarmMgntBird = () => {
             sortable: false,
             width: 160,
             renderCell: (params) => (
-                <IconButton onClick={() => handleEdit(params.row.id)} color="secondary">
+                <IconButton onClick={() => handleSelectForEdit(params.row.id)} color="secondary">
                     <EditIcon />
                 </IconButton>
             ),
@@ -63,10 +59,10 @@ export const FarmMgntBird = () => {
                 </IconButton>
             ),
         },
-    
+
     ];
-    
-    const rows = [
+
+    const rowss = [
         { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
         { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
         { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
@@ -78,15 +74,285 @@ export const FarmMgntBird = () => {
         { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
     ];
 
+    const BIRDQUERY = gql`
+        query GetBirds {
+        poultryBirds {
+        id
+        name
+        totalCost
+        price
+        healthStatus
+        weight
+    }
+}
+    `
+
+    const ADDBIRDMUTATION = gql`
+    mutation AddBird ($bird: PoultryBirdInput) {
+    addPoultryBird(bird: $bird) {
+       id, name, price, description, age, healthStatus, weight, totalCost
+    }
+}
+    `
+
+    const EDITBIRDMUTATION = gql`
+        mutation EditBird ($id: ID!, $edit: EditPoultryBirdInput) {
+        editPoultryBird(id: $id, edit: $edit) {
+            id, name, price, description, age, healthStatus, weight, totalCost
+
+    }
+}
+    `
+
+    const DELETEMUTATION = gql`
+        mutation deleteBird ($id: ID!) {
+        deletePoultryBird(id: $id) {
+            id
+            name, 
+            price
+        }
+    }
+    `
 
 
 
+    const { data, error, loading } = useQuery(BIRDQUERY);
 
-  return (
-    <Box display={"flex"} flexDirection={'column'}>
-    <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' bgcolor={theme.palette.secondary.main} color={theme.palette.text.white}  padding={{xs: 2, md: 5}}textAlign={'center'}>Bird Catalogue Management <GiChicken size={50}/></Typography>
+    // console.log(data.poultryBirds, error, loading)
 
-    <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit}/>
-    </Box>
-  )
+    // const rows = data ? data?.poultryBirds :  [];
+
+    useEffect(() => {
+        if (data?.poultryBirds) {
+            setRows(data.poultryBirds)
+        }
+    }, [data])
+
+    const [editPoultryBird, { data: editData, error: editError, loading: editLoading }] = useMutation(EDITBIRDMUTATION);
+
+
+    const handleSelectForEdit = (id) => {
+        console.log("Selected id for edit:", id);
+        setSelectedBird(id); // Save the selected bird in state
+        setShowEditForm(true); // Open the form for editing
+    };
+
+
+    const handleEdit = async (values) => {
+        console.log('this is values, values', values)
+        console.log('values', selectedBird)
+        setShowEditForm(true)
+        try {
+
+            const formData = new FormData();
+
+            // Ensure `values.images` exists and is an array
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((image) => {
+                    formData.append("images", image); // Append each file separately
+                });
+            } else {
+                return;
+            }
+
+            console.log('id at the middle', values.id)
+
+
+            const uploadImages = await axios.post('http://localhost:5000/upload', formData, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+            })
+            setImagesUrls(uploadImages?.data?.imageUrls)
+
+            console.log('id at before merged', values.id)
+
+            const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
+
+
+            console.log('id at the end', values.id)
+
+            await editPoultryBird({ variables: {id: selectedBird, edit: mergedValues } });
+
+
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    };
+
+    useEffect(() => {
+       if(editData) {
+        setRows((prev)=> {
+             const newData = prev.filter(item => item.id !== selectedBird);
+            return [...newData, editData.editPoultryBird]
+        })
+       }
+    }, [editData])
+
+    console.log(editData, editError, editLoading)
+
+    const [deletePoultryBird, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETEMUTATION);
+    const handleDelete = async (id) => {
+        setIdToDelete(id);
+        console.log(`Delete row with ID: ${id}`);
+        const confirmDelete = window.confirm(`Are you sure you want to delete the item?`);
+        if (!confirmDelete) return;
+        await deletePoultryBird({ variables: { id } });
+        console.log(id, rows)
+      
+        // setRows(prev => prev.filter(item => item.id !== id)); // ✅ Correctly updates state
+    };
+    useEffect(() =>{
+        if(deleteData) {
+            setRows((prev) => {
+               return prev.filter(item => item.id !== setIdToDelete)
+           })
+        }
+
+    }, [deleteData])
+
+    console.log(deleteData)
+
+    const handlePopupForm = () => {
+        setShowForm(true);
+    }
+
+    const handlePopupEditForm = () => {
+        setShowEditForm(true)
+    }
+
+    const [addPoultryBird, { data: addData, error: addError, loading: addLoading }] = useMutation(ADDBIRDMUTATION);
+    const handleSubmit = async (values) => {
+
+        try {
+
+            const formData = new FormData();
+
+            // Ensure `values.images` exists and is an array
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((image) => {
+                    formData.append("images", image); // Append each file separately
+                });
+            } else {
+                return;
+            }
+
+            const uploadImages = await axios.post('http://localhost:5000/upload', formData, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+            })
+            setImagesUrls(uploadImages?.data?.imageUrls)
+
+            let { name, price, description, age, healthStatus, weight, totalCost, images } = values;
+
+            const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
+
+            console.log('values', mergedValues)
+
+
+            await addPoultryBird({ variables: { bird: mergedValues } });
+
+
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (addData) {
+            setRows(prev => [...prev, addData.addPoultryBird]); // ✅ Correct way to update state immutably
+        }
+    }, [addData]);
+
+
+    return (
+        <>
+            <Box display={"flex"} flexDirection={'column'}>
+                <Grid container bgcolor={theme.palette.secondary.main} padding={{ xs: 1, md: 3 }}>
+                    <Grid size={10}>
+                        <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' color={theme.palette.text.white} textAlign={'center'}>Bird Catalogue Management <GiChicken size={50} /></Typography>
+                    </Grid>
+                    <Grid size={2} alignItems={'center'} justifyContent={'center'}>
+                        <Box height={"100%"} display={'flex'} justifyContent={'center'} alignItems={'center'} sx={{
+                            cursor: 'pointer'
+                        }} onClick={handlePopupForm}>
+                            <AddRoundedIcon sx={{
+                                color: theme.palette.text.white,
+                                fontSize: "30px"
+                            }} />
+                        </Box>
+                    </Grid>
+                </Grid>
+
+                <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+            </Box>
+
+            {showForm &&
+                (<ReusableForm
+
+                    open={showForm}
+                    onClose={() => setShowForm(false)}
+                    onSubmit={handleSubmit}
+                    title={"Add new Item"}
+                    fields={[
+                        { name: "name", label: "Name", validation: Yup.string().required("Name is required") },
+                        { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
+                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(1, "Age must be at least 1") },
+                        { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
+                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
+                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
+                        {
+                            name: "healthStatus", type: 'select', label: "Health Status", options: [
+                                "sick",
+                                "healthy",
+                                "vaccinated",
+                                "dead",
+                            ], validation: Yup.string().required("Total Cost is required")
+                        },
+                        { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
+
+                    ]}
+                />)
+            }
+
+            {showEditForm && (
+                <ReusableForm
+
+                    open={handlePopupEditForm}
+                    onClose={() => setShowEditForm(false)}
+                    onSubmit={handleEdit}
+                    title={'Edit Item'}
+                    fields={[
+                        { name: "name", label: "Name", validation: Yup.string().required("Name is required") },
+                        { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
+                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(1, "Age must be at least 1") },
+                        { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
+                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
+                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
+                        {
+                            name: "healthStatus", type: 'select', label: "Health Status", options: [
+                                "sick",
+                                "healthy",
+                                "vaccinated",
+                                "dead",
+                            ], validation: Yup.string().required("Total Cost is required")
+                        },
+                        { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
+
+                    ]}
+                />
+            )}
+
+
+
+        </>
+
+    )
 }

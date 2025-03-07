@@ -9,10 +9,23 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EggIcon from "@mui/icons-material/Egg"; // Example icon for poultry
+import { useMutation, useQuery, gql } from '@apollo/client';
 
 
 export const FarmMgntEgg = () => {
     const theme = useTheme();
+
+    const EGGSQUERY = gql`
+        query EggsQuery {
+        poultryEggs {
+        types
+        id
+        images
+        pricePerTray
+    }
+}
+    
+    `
 
 
     const handleEdit = (id) => {
@@ -65,9 +78,9 @@ export const FarmMgntEgg = () => {
                 </IconButton>
             ),
         },
-    
+
     ];
-    
+
     const rows = [
         { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
         { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
@@ -80,15 +93,17 @@ export const FarmMgntEgg = () => {
         { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
     ];
 
+const {data: eggsData, error: eggsError, loading: loadingError} =useQuery(EGGSQUERY);
+
+console.log(eggsData)
 
 
 
+    return (
+        <Box display={"flex"} flexDirection={'column'}>
+            <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' bgcolor={theme.palette.secondary.main} color={theme.palette.text.white} padding={{ xs: 2, md: 5 }} textAlign={'center'}>Egg Catalogue Management <EggIcon color='primary' /></Typography>
 
-  return (
-    <Box display={"flex"} flexDirection={'column'}>
-    <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' bgcolor={theme.palette.secondary.main} color={theme.palette.text.white}  padding={{xs: 2, md: 5}}textAlign={'center'}>Egg Catalogue Management <EggIcon color='primary'/></Typography>
-
-    <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit}/>
-    </Box>
-  )
+            <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+        </Box>
+    )
 }

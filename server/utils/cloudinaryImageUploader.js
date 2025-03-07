@@ -1,6 +1,8 @@
 import cloudinary from "../config/cloudinary.js";
 
 export const cloudinaryImageUploader = async (req, res) => {
+
+  console.log(req.files)
     try {
       if (!req.files || req.files.length === 0) {
         return res.status(400).json({ error: "No files uploaded" });

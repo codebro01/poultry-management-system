@@ -12,6 +12,10 @@ import { startDB } from './db/connectDb.js';
 import cors from 'cors';
 import { upload } from './config/multer.js';
 import { cloudinaryImageUploader } from './utils/cloudinaryImageUploader.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 
 
@@ -31,7 +35,17 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.post('/upload', upload.array('images', 5), cloudinaryImageUploader)
+
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Handle SPA routing
+});
+
+app.post('/upload', upload.array('images', 5), cloudinaryImageUploader);
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Adjust accordingly
+});
 
 
 const startServer = async () => {
@@ -49,7 +63,9 @@ const startServer = async () => {
 
 }
 
-startServer()
+startServer();
+
+
 
 
 

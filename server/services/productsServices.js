@@ -32,6 +32,7 @@ class ProductServices {
 
     async addBirds({ totalCost, name, price, description, age, healthStatus, weight, images }) {
         try {
+            
             const bird = new PoultryBirds({ totalCost, name, price, description, age, healthStatus, weight, images });
             await bird.save();
             return bird;

@@ -110,8 +110,8 @@ export const resolvers = {
             const user = authMiddleware(context);
             RBAC(user, 'admin');
 
-            const { name, price, description, age, healthStatus, weight } = edit;
-            return productsServices.updateBird({ id, name, price, description, age, healthStatus, weight });
+            const { name, price, description, age, healthStatus, weight, totalCost } = edit;
+            return productsServices.updateBird({ id, name, price, description, age, healthStatus, weight, totalCost });
         },
 
         // * Delete Poultry Bird
