@@ -5,7 +5,6 @@ import { Card, CardContent, Typography } from "@mui/material";
 
 export const LineChart = ({ title, chartData = [], categories = [] }) => {
   const theme = useTheme(); // Adapt colors based on the theme
-    console.log(theme)
   const chartOptions = {
     chart: {
       type: "line",

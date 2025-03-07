@@ -10,6 +10,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { startDB } from './db/connectDb.js';
 import cors from 'cors';
+import { upload } from './config/multer.js';
+import { cloudinaryImageUploader } from './utils/cloudinaryImageUploader.js';
 const app = express();
 
 
@@ -28,6 +30,9 @@ app.use(cors({
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.post('/upload', upload.array('images', 5), cloudinaryImageUploader)
+
 
 const startServer = async () => {
     await startDB();

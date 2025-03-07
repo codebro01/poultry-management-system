@@ -5,8 +5,9 @@ import { Box } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNairaSign } from "@fortawesome/free-solid-svg-icons";
+import CircularProgress from '@mui/material/CircularProgress';
 
-export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIconBgColor, flexBasis }) {
+export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIconBgColor, flexBasis, loading }) {
     const theme = useTheme();
     const formatNumber = (num) => num.toLocaleString("en-NG");
 
@@ -31,9 +32,9 @@ export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIc
                 <Typography variant='h5' color={theme.palette.text.white} sx={{
                     color: theme.palette.text.darkGrey
                 }}>{subTitle}</Typography>
-                <Typography variant='h2'><FontAwesomeIcon icon={faNairaSign} />{formatNumber(title)}</Typography>
-                <Box sx={{display: "flex", justifyContent:"space-between", alignItems: "center", gap:"10px"}}>
-                    <Typography fontSize={13}>{iconText}</Typography>
+                <Typography variant='h2'><FontAwesomeIcon icon={faNairaSign} /> {loading ? (<CircularProgress size= {24}/>) : formatNumber(title)}</Typography>
+                <Box sx={{display: "flex", justifyContent:"flex-start", alignItems: "center", gap:"10px"}}>
+                    <Box>{iconText}</Box>
                     <Typography sx={{
                         color: theme.palette.text.darkGrey, 
                         fontSize: "12px"

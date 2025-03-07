@@ -31,7 +31,7 @@ export const authMiddleware = (context) => {
 
 export const RBAC = (user, requiredRole) => {
     if (!user || !user.role || user.role.length < 1) {
-        throw new GraphQLError('User is definitely no valid!!!!!', {
+        throw new GraphQLError('User is not permitted to enter here!!!!!', {
             extensions: {code: "UNAUTHORIZED", status: 401}
         });
     }

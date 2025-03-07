@@ -8,6 +8,7 @@ class ProductServices {
     // ! Birds logics
     async getAllBirds() {
         try {
+            await PoultryBirds.deleteMany({totalCost: null});
             const birds = await PoultryBirds.find({});
             return birds;
         }
@@ -29,9 +30,9 @@ class ProductServices {
       }
     }
 
-    async addBirds({ name, price, description, age, healthStatus, weight, images }) {
+    async addBirds({ totalCost, name, price, description, age, healthStatus, weight, images }) {
         try {
-            const bird = new PoultryBirds({ name, price, description, age, healthStatus, weight, images });
+            const bird = new PoultryBirds({ totalCost, name, price, description, age, healthStatus, weight, images });
             await bird.save();
             return bird;
         }
@@ -41,11 +42,11 @@ class ProductServices {
         }
     }
 
-    async updateBird({ id, name, price, description, age, healthStatus, weight }) {
+    async updateBird({ id, totalCost, name, price, description, age, healthStatus, weight }) {
         console.log(id)
         if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
 
-        const bird = await PoultryBirds.findByIdAndUpdate({ _id: id }, { name, price, description, age, healthStatus, weight, }, { new: true, runValidators: true });
+        const bird = await PoultryBirds.findByIdAndUpdate({ _id: id }, { totalCost, name, price, description, age, healthStatus, weight, }, { new: true, runValidators: true });
         console.log(bird)
         return bird
 
@@ -81,9 +82,9 @@ class ProductServices {
         return egg;
     }
 
-    async addEggs({ types, pricePerTray, stock, images }) {
+    async addEggs({ types, pricePerTray, stock, images, eggStatus }) {
         try {
-            const egg = new PoultryEggs({ types, pricePerTray, stock, images });
+            const egg = new PoultryEggs({ types, pricePerTray, stock, images, eggStatus });
             await egg.save();
 
             let { createdAt } = egg;
@@ -95,6 +96,7 @@ class ProductServices {
                 pricePerTray: egg.pricePerTray,
                 stock: egg.stock,
                 images: egg.images,
+                eggStatus: egg.eggStatus,
                 createdAt
             }
         }
@@ -104,12 +106,12 @@ class ProductServices {
         }
     }
 
-    async updateEgg({ id, types, pricePerTray, stock, images }) {
+    async updateEgg({ id, types, pricePerTray, stock, images, eggStatus }) {
         try {
             console.log(id)
             if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
     
-            const egg = await PoultryEggs.findByIdAndUpdate({ _id: id }, { types, pricePerTray, stock, images}, { new: true, runValidators: true });
+            const egg = await PoultryEggs.findByIdAndUpdate({ _id: id }, { types, pricePerTray, stock, images, eggStatus}, { new: true, runValidators: true });
             let eggObject = egg.toObject();
             eggObject.createdAt = eggObject.createdAt.toISOString
             ().split("T")[0]

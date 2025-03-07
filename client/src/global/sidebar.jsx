@@ -17,7 +17,6 @@ import { Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
 export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
-    console.log(sidebarClasses);
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const location = useLocation();

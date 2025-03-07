@@ -6,6 +6,10 @@ const PoultryBirdsSchema = new Schema(
       type: String,
       required: [true, "Please name is required"],
     },
+    totalCost: {
+      type: Number,
+      required: [true, "Please totalCost is required"],
+    },
     price: {
       type: Number,
       required: [true, "Please price is required"],
@@ -20,7 +24,7 @@ const PoultryBirdsSchema = new Schema(
     },
     healthStatus: {
       type: String,
-      enum: ["healthy", "sick", "vaccinated"], // Matches GraphQL enum
+      enum: ["healthy", "sick", "vaccinated","dead"], // Matches GraphQL enum
       default: "healthy",
       required: true,
     },
@@ -55,6 +59,12 @@ const PoultryEggsSchema = new Schema({
     images: {
         type: [String], 
         required: true
+    }, 
+    eggStatus: {
+      type: String, 
+      default: "good",
+      required: true, 
+
     }
 }, {timestamps: true})
 

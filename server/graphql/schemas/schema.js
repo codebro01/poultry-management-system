@@ -1,5 +1,8 @@
-export const typeDefs = `#graphql
-#********************* User******************************* 
+// import {gql} from 'graphql-tag'
+
+export const typeDefs =`#graphql
+#********************* User*******************************   
+
     type User {
         id: ID!
         username: String!
@@ -51,6 +54,10 @@ export const typeDefs = `#graphql
 
     #********************* Product ******************************* 
 
+
+    scalar Upload
+
+
     type PoultryBirds {
         id: ID!
         name: String!
@@ -61,12 +68,14 @@ export const typeDefs = `#graphql
         createdAt: String!
         weight: String!
         images: [String!]!
+        totalCost: Float
     }
 
     enum HealthStatus {
         healthy
         sick
         vaccinated
+        dead
     }
 
     type Query {
@@ -87,7 +96,8 @@ export const typeDefs = `#graphql
     age: Int!
     healthStatus: HealthStatus!
     weight: Int!
-    images: [String!]!
+    totalCost: Int!
+    images: [Upload!]!
 }
 
 input EditPoultryBirdInput {
@@ -100,12 +110,17 @@ input EditPoultryBirdInput {
     images: [String!]
 }
 
+enum eggStatusValue {
+    good
+    bad
+}
 
     type PoultryEggs {
         id: ID!
         types: EggTypes!
         pricePerTray: Float!
         stock: Int!
+        eggStatus: eggStatusValue
         images: [String!]!
         createdAt: String!
     }
@@ -131,12 +146,14 @@ input EditPoultryBirdInput {
         pricePerTray: Float!
         stock: Int!
         images: [String!]!
+        eggStatus: String!
     }
     input EditPoultryEggInput {
         types: String
         pricePerTray: Float
         stock: Int
         images: [String!]
+        eggStatus: String!
     }
 
     type PoultryFeeds {
@@ -214,6 +231,10 @@ type OrderItem {
   price: Float!
 }
 
+enum OrderCategory {
+    bird
+    egg
+}
 type Order {
   id: ID!
   customerName: String!
@@ -223,9 +244,12 @@ type Order {
   status: OrderStatus!
   createdAt: String!
   updatedAt: String!
-  address: String!
-  phoneNo: Int!
+  customerAddress: String!
+  customerPhone: String!
+  category: OrderCategory
 }
+
+
 
 type Query {
   getOrder(id: ID!): Order
@@ -236,8 +260,9 @@ type Mutation {
   createOrder(
     customerName: String!
     customerEmail: String!
-    cusomerPhone: Int!
+    customerPhone: String!
     customerAddress: String!
+    category: String!
     items: [OrderItemInput!]!
   ): Order!
 
@@ -249,6 +274,32 @@ input OrderItemInput {
   productName: String!
   quantity: Int!
   price: Float!
+}
+
+type totalPerMonth {
+    month: String!
+    total: Int!
+}
+
+
+type DashboardData {
+    totalProfit: Int!
+    # yearlyProfitPercent: Int!
+    customerOrders: [Order!]! 
+    totalOrdersAmount: Int!
+    deliveryRating: Int!
+    totalChicken: Int!
+    totalChickenSold: Int!
+    mortalityRate: Float!
+    totalEggsCollected: Int!
+    totalEggsSold: Int!
+    damageRate: Float!
+    eggsProducedPerMonth: [totalPerMonth!]!
+    chickenSoldPerMonth: [totalPerMonth!]!
+}
+
+type Query {
+    getDashboardData: DashboardData!
 }
 
 

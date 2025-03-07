@@ -3,11 +3,14 @@ import { userServices } from '../../services/userServices.js';
 import { authMiddleware, RBAC } from '../../middlewares/authMiddleware.js';
 import { productsServices } from '../../services/productsServices.js';
 import { customError } from '../../utils/graphqlError.js';
-import { INTERNAL_SERVER_ERROR, StatusCodes } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
+import { orderServices } from '../../services/orderServices.js';
+import { dashboardServices } from '../../services/dasboardServices.js';
 
 const userId = nanoid(8);
 
 export const resolvers = {
+
     Query: {
 
         // ! users Query
@@ -47,21 +50,24 @@ export const resolvers = {
 
         poultryFeed: (_, { id }) => {
             return productsServices.getSingleFeed({ id })
+        },
+
+        // ! Orders Query
+
+        listOrders: (_, args, context) => {
+            return orderServices.getAllOrders();
+        },
+
+        // ! Dashboard Data Query
+        getDashboardData: (_, args, context) => {
+            console.log('hello')
+            const user = authMiddleware(context);
+            RBAC(user, 'admin')
+            return dashboardServices.getDashboardData();
         }
     },
     Mutation: {
 
-        // POV: async (_, { expectation }) => {
-        //     const { dell_xps_13, rolls_Royce,
-        //         G_wagon, five_Bedroom_Duplex, } = expectation;
-
-        //     if (!dell_xps_13 || !rolls_Royce || !five_Bedroom_Duplex || !G_wagon)
-        //         throw customError('Wetin I dey find never complete, grid harder!!!',
-        //             "INTERNAL_SERVER_ERROR",
-        //             StatusCodes.INTERNAL_SERVER_ERROR);
-        //     return { message: "First batch of goals succedded, unto the next!" }
-
-        // },
 
         // ! User Mutation
         createUser: async (_, { user }, context) => {
@@ -93,8 +99,8 @@ export const resolvers = {
             console.log('entered create bird by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
-            const { name, price, description, age, healthStatus, weight, images } = bird;
-            return productsServices.addBirds({ name, price, description, age, healthStatus, weight, images });
+            const { name, price, description, age, healthStatus, weight, images, totalCost } = bird;
+            return productsServices.addBirds({totalCost, name, price, description, age, healthStatus, weight, images });
         },
 
         //  * Add Birds
@@ -124,11 +130,11 @@ export const resolvers = {
             console.log('entered create egg by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
-            const { types, pricePerTray, stock, images} = egg;
+            const { types, pricePerTray, stock, images, eggStatus } = egg;
 
             // const createdAt = Date.now().toString;
             // console.log(createdAt)
-            return productsServices.addEggs({ types, pricePerTray, stock, images});
+            return productsServices.addEggs({ types, pricePerTray, stock, images, eggStatus });
         },
 
         //  * Edit Eggs
@@ -138,8 +144,8 @@ export const resolvers = {
             const user = authMiddleware(context);
             RBAC(user, 'admin');
 
-            const { types, pricePerTray, stock, images, createdAt } = edit;
-            return productsServices.updateEgg({ id, types, pricePerTray, stock, images, createdAt });
+            const { types, pricePerTray, stock, images, createdAt, eggStatus } = edit;
+            return productsServices.updateEgg({ id, types, pricePerTray, stock, images, createdAt, eggStatus });
 
         },
 
@@ -184,7 +190,22 @@ export const resolvers = {
             RBAC(user, 'admin');
             productsServices.deleteFeed({ id });
             return productsServices.getAllFeeds();
+        },
+
+        // ! Orders Mutation
+
+        createOrder: (_, {customerName, customerEmail, customerPhone, customerAddress, category, items}) => {
+            // const {productId, productName, quantity, price} = items;
+            return orderServices.createOrder({customerAddress, customerName, customerEmail, customerPhone,category, items});
+        }, 
+        updateOrderStatus: (_, {id, status}, context) => {
+            const user = authMiddleware(context);
+            RBAC(user, 'admin', 'user');
+            return orderServices.updateOrderStatus({id, status});
         }
+
+
+
     }
 
 
