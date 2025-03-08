@@ -130,11 +130,11 @@ export const resolvers = {
             console.log('entered create egg by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
-            const { types, pricePerTray, stock, images, eggStatus } = egg;
+            const { types, pricePerTray, stock, images, eggStatus, totalCost } = egg;
 
             // const createdAt = Date.now().toString;
             // console.log(createdAt)
-            return productsServices.addEggs({ types, pricePerTray, stock, images, eggStatus });
+            return productsServices.addEggs({ types, pricePerTray, stock, images, eggStatus, totalCost });
         },
 
         //  * Edit Eggs

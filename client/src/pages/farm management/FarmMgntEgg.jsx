@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataTable } from '../../components/DataTable';
 import { Typography, Box } from '@mui/material';
 import { useTheme } from '@emotion/react';
@@ -10,10 +10,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EggIcon from "@mui/icons-material/Egg"; // Example icon for poultry
 import { useMutation, useQuery, gql } from '@apollo/client';
+import { ReusableForm } from '../../components/formComponent';
+import Grid from "@mui/material/Grid2";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import * as Yup from "yup";
+import axios from 'axios';
+
+const API_URL = `${import.meta.env.VITE_API_URL}`
 
 
 export const FarmMgntEgg = () => {
     const theme = useTheme();
+    const [rows, setRows] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const [showEditForm, setEditForm] = useState(false);
+    const [imageUrls, setImagesUrls] = useState([]);
+
 
     const EGGSQUERY = gql`
         query EggsQuery {
@@ -22,10 +34,23 @@ export const FarmMgntEgg = () => {
         id
         images
         pricePerTray
+        stock
+        eggStatus
+
     }
 }
     
     `
+    const ADDEGGMUTATION = gql`
+      mutation AddEgg ($egg: AddPoultryEggInput) {
+    addPoultryEgg(egg: $egg) {
+        id, types, pricePerTray, stock, images, createdAt eggStatus
+    }
+}`
+
+    const handlePopupForm = () => {
+        setShowForm(true);
+    }
 
 
     const handleEdit = (id) => {
@@ -38,18 +63,18 @@ export const FarmMgntEgg = () => {
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First name', width: 130 },
-        { field: 'lastName', headerName: 'Last name', width: 130 },
+        { field: 'types', headerName: 'Type', width: 130 },
+        { field: 'pricePerTray', headerName: 'Price Per Tray', width: 130 },
         {
-            field: 'age',
-            headerName: 'Age',
+            field: 'stock',
+            headerName: 'Stock',
             type: 'number',
             width: 90,
         },
         {
-            field: 'fullName',
-            headerName: 'Full name',
-            description: 'This column has a value getter and is not sortable.',
+            field: 'eggStatus',
+            headerName: 'Eggs Condition',
+            description: 'The egg is either good or bad',
             sortable: true,
             width: 160,
             valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
@@ -81,29 +106,142 @@ export const FarmMgntEgg = () => {
 
     ];
 
-    const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    ];
+    // const rows = [
+    //     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+    //     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+    //     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+    //     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+    //     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    //     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+    //     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    //     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    //     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+    // ];
 
-const {data: eggsData, error: eggsError, loading: loadingError} =useQuery(EGGSQUERY);
+    const { data: eggsData, error: eggsError, loading: loadingError } = useQuery(EGGSQUERY);
 
-console.log(eggsData)
+    console.log(eggsData?.poultryEggs);
 
+    useEffect(() => {
+        if (eggsData) {
+            setRows(eggsData.poultryEggs)
+        }
+    }, [eggsData])
+
+    const [addPoultryEgg, { data: addData, error: addError, loading: addLoading }] = useMutation(ADDEGGMUTATION);
+    const handleSubmit = async (values) => {
+        console.log(values)
+        try {
+
+            const formData = new FormData();
+
+            // Ensure `values.images` exists and is an array
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((image) => {
+                    formData.append("images", image); // Append each file separately
+                });
+            } else {
+                return;
+            }
+
+            const uploadImages = await axios.post(`${API_URL}/upload`, formData, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+            })
+            setImagesUrls(uploadImages?.data?.imageUrls)
+
+            let { name, price, description, age, healthStatus, weight, totalCost, images } = values;
+
+            const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
+
+            console.log('values', mergedValues)
+
+
+            await addPoultryEgg({ variables: { egg: mergedValues } });
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+    if(addData) console.log(addData)
 
 
     return (
-        <Box display={"flex"} flexDirection={'column'}>
-            <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' bgcolor={theme.palette.secondary.main} color={theme.palette.text.white} padding={{ xs: 2, md: 5 }} textAlign={'center'}>Egg Catalogue Management <EggIcon color='primary' /></Typography>
+        <>
+            <Box display={"flex"} flexDirection={'column'}>
+                <Grid container bgcolor={theme.palette.secondary.main} padding={{ xs: 1, md: 3 }}>
+                    <Grid size={10}>
+                        <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' color={theme.palette.text.white} textAlign={'center'}>Eggs Catalogue Management <GiChicken size={50} /></Typography>
+                    </Grid>
+                    <Grid size={2} alignItems={'center'} justifyContent={'center'}>
+                        <Box height={"100%"} display={'flex'} justifyContent={'center'} alignItems={'center'} sx={{
+                            cursor: 'pointer'
+                        }} onClick={handlePopupForm}>
+                            <AddRoundedIcon sx={{
+                                color: theme.palette.text.white,
+                                fontSize: "30px"
+                            }} />
+                        </Box>
+                    </Grid>
+                </Grid>
 
-            <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
-        </Box>
+                <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+            </Box>
+
+            {showForm &&
+                (<ReusableForm
+
+                    open={showForm}
+                    onClose={() => setShowForm(false)}
+                    onSubmit={handleSubmit}
+                    title={"Add new Item"}
+                    fields={[
+                        { name: "types", label: "Type", validation: Yup.string().required("Type is required") },
+                        { name: "pricePerTray", label: "Price Per Tray", type: "number", validation: Yup.number().required("Price is required") },
+                        { name: "stock", label: "Stock", type: "number", validation: Yup.number().required("Stock is required") },
+                        {
+                            name: "eggStatus", type: 'select', label: "Egg Status", options: [
+                                "good",
+                                "bad",
+                            ], validation: Yup.string().required("Total Cost is required")
+                        },
+                        { name: "totalCost", label: "Total Cost", validation: Yup.number().required("Total Cost is required") },
+                        { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
+
+                    ]}
+                />)
+            }
+
+            {showEditForm && (
+                <ReusableForm
+
+                    open={handlePopupEditForm}
+                    onClose={() => setShowEditForm(false)}
+                    onSubmit={handleEdit}
+                    title={'Edit Item'}
+                    fields={[
+                        { name: "name", label: "Name", validation: Yup.string().required("Name is required") },
+                        { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
+                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(1, "Age must be at least 1") },
+                        { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
+                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
+                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
+                        {
+                            name: "healthStatus", type: 'select', label: "Health Status", options: [
+                                "sick",
+                                "healthy",
+                                "vaccinated",
+                                "dead",
+                            ], validation: Yup.string().required("Total Cost is required")
+                        },
+                        { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
+
+                    ]}
+                />
+            )}
+        </>
     )
 }

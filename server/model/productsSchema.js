@@ -65,6 +65,10 @@ const PoultryEggsSchema = new Schema({
       default: "good",
       required: true, 
 
+    },
+    totalCost: {
+      type: Number, 
+      required: true, 
     }
 }, {timestamps: true})
 

@@ -125,6 +125,7 @@ enum eggStatusValue {
         eggStatus: eggStatusValue
         images: [String!]!
         createdAt: String!
+        totalCost: Float
     }
 
     enum EggTypes {
@@ -149,6 +150,7 @@ enum eggStatusValue {
         stock: Int!
         images: [String!]!
         eggStatus: String!
+        totalCost: Float!
     }
     input EditPoultryEggInput {
         types: String
@@ -156,6 +158,7 @@ enum eggStatusValue {
         stock: Int
         images: [String!]
         eggStatus: String!
+        totalCost: Float!
     }
 
     type PoultryFeeds {
@@ -285,10 +288,10 @@ type totalPerMonth {
 
 
 type DashboardData {
-    totalProfit: Int!
+    totalProfit: Float!
     # yearlyProfitPercent: Int!
     customerOrders: [Order!]! 
-    totalOrdersAmount: Int!
+    totalOrdersAmount: Float!
     deliveryRating: Int!
     totalChicken: Int!
     totalChickenSold: Int!

@@ -83,9 +83,9 @@ class ProductServices {
         return egg;
     }
 
-    async addEggs({ types, pricePerTray, stock, images, eggStatus }) {
+    async addEggs({ types, pricePerTray, stock, images, eggStatus, totalCost }) {
         try {
-            const egg = new PoultryEggs({ types, pricePerTray, stock, images, eggStatus });
+            const egg = new PoultryEggs({ types, pricePerTray, stock, images, eggStatus, totalCost });
             await egg.save();
 
             let { createdAt } = egg;
@@ -98,6 +98,7 @@ class ProductServices {
                 stock: egg.stock,
                 images: egg.images,
                 eggStatus: egg.eggStatus,
+                totalCost: egg.totalCost,
                 createdAt
             }
         }

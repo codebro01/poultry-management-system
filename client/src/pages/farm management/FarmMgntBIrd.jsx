@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import axios from 'axios';
 import { EditForm } from '../../components/editFormComponent';
 
+
 export const FarmMgntBird = () => {
     const theme = useTheme();
     const [rows, setRows] = useState([]);
@@ -25,6 +26,8 @@ export const FarmMgntBird = () => {
     const [imageUrls, setImagesUrls] = useState([]);
     const [selectedBird, setSelectedBird] = useState('');
     const [idtoDelete, setIdToDelete] = useState('');
+    const API_URL = `${import.meta.env.VITE_API_URL}`
+
 
 
     const columns = [
@@ -240,7 +243,7 @@ export const FarmMgntBird = () => {
                 return;
             }
 
-            const uploadImages = await axios.post('https://poultry-management-system-ten.vercel.app/upload', formData, {
+            const uploadImages = await axios.post(`${API_URL}/upload`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data", // Important for file uploads
@@ -304,7 +307,7 @@ export const FarmMgntBird = () => {
                     fields={[
                         { name: "name", label: "Name", validation: Yup.string().required("Name is required") },
                         { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
-                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(1, "Age must be at least 1") },
+                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(0.1, "Age must be at least 1") },
                         { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
                         { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
                         { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },

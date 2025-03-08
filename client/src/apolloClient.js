@@ -1,7 +1,8 @@
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from "@apollo/client";
+const API_URL = `${import.meta.env.VITE_API_URL}`
 
 const httpLink = new HttpLink({
-  uri: "https://poultry-management-system-ten.vercel.app/graphql",
+  uri: `${API_URL}/graphql`,
   credentials: "include",  // ✅ Ensures cookies are sent
 });
 

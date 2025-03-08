@@ -104,8 +104,9 @@ class DashboardServices {
                     
 
         
-        console.log('eggsProducedPerMonth', eggsProducedPerMonth);
-        console.log('chickenSoldPerMonth', chickenSoldPerMonth);
+        console.log(totalProfit, totalOrdersAmount, totalChicken, totalChickenSold, mortalityRate, totalEggsCollected, totalEggsSold, damageRate, customerOrders, eggsProducedPerMonth, chickenSoldPerMonth);
+   
+        
         return {totalProfit, totalOrdersAmount, totalChicken, totalChickenSold, mortalityRate, totalEggsCollected, totalEggsSold, damageRate, customerOrders, eggsProducedPerMonth, chickenSoldPerMonth};
     }
 
