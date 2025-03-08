@@ -240,7 +240,7 @@ export const FarmMgntBird = () => {
                 return;
             }
 
-            const uploadImages = await axios.post('http://localhost:5000/upload', formData, {
+            const uploadImages = await axios.post('https://poultry-management-system-ten.vercel.app/upload', formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data", // Important for file uploads
