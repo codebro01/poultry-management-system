@@ -19,18 +19,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 
-const allowedDomains = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5000','https://poultry-management-system-ten.vercel.app/'];
+// const allowedDomains = ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:5000','https://poultry-management-system-ten.vercel.app/'];
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         if (!origin || allowedDomains.includes(origin)) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error('Origin blocked by Cors'))
+//         }
+//     },
+//     credentials: true,
+//     methods: ['POST', 'OPTIONS']
+// }))
+
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedDomains.includes(origin)) {
-            callback(null, true)
-        } else {
-            callback(new Error('Origin blocked by Cors'))
-        }
-    },
+    origin: "*",  // Change this later to allow only specific domains
     credentials: true,
-    methods: ['POST', 'OPTIONS']
-}))
+    methods: ['GET', 'POST', 'OPTIONS']
+}));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
