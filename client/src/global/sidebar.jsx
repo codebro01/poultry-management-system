@@ -28,7 +28,8 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
             left: 0,
             top: "56px",
             backgroundColor: theme.palette.background.paper,
-            display: authPage ? 'none' : null
+            display: authPage ? 'none' : null, 
+            zIndex: 99999999
 
         }} >
             <Box

@@ -35,7 +35,7 @@ const App = () => {
             id="container"
             maxWidth={false}
             sx={{
-              marginTop: authPage ? 0 : "80px",
+              marginTop: "80px",
               display: "flex",
               gap: "20px",
               height: "100%",

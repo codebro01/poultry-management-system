@@ -27,12 +27,11 @@ export const EggSalesRep = () => {
 
     useEffect(() => {
       if(queryData) {
-        
+        console.log(data)
         setData(queryData.getDashboardData.monthlyEggSalesChart)
       }
     }, [queryData])
 
-    console.log(queryData.getDashboardData.monthlyEggSalesChart)
     const salesData = [
         { id: 1, month: "Jan", chickensSold: 120, revenue: 2400 },
         { id: 2, month: "Feb", chickensSold: 98, revenue: 2100 },
@@ -42,6 +41,6 @@ export const EggSalesRep = () => {
         { id: 6, month: "Jun", chickensSold: 200, revenue: 4000 },
       ];
   return (
-    <SalesReportComponent salesData={data} totalSoldTitle={'Total Egg Sold'} totalRevenTitle={'Total Revenue'} />
+    <SalesReportComponent queryLoading = {queryLoading} salesData={data} totalSoldTitle={'Total Egg Sold'} totalRevenTitle={'Total Revenue'} />
   )
 }

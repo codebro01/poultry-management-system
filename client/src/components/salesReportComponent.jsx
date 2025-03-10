@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, } from "@mui/material";
+import { Skeleton,Box, Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, } from "@mui/material";
 import Chart from "react-apexcharts";
 import Grid from "@mui/material/Grid2"
 import { useTheme } from "@emotion/react";
@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 
-export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitle, totalRevenTitle, totalItemSold, totalRevenue,chickensSoldForEachMonth}) => {
+export const SalesReportComponent = ({ queryLoading, salesData, chartSeriesName, totalSoldTitle, totalRevenTitle, totalItemSold, totalRevenue, chickensSoldForEachMonth }) => {
   const theme = useTheme();
 
   const month = [
@@ -26,13 +26,12 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
     { name: "Nov", value: 11 },
     { name: "Dec", value: 12 }
   ];
-  
 
+  // console.log(queryLoading)
 
   const totalItemSoldAcc = salesData.reduce((acc, data) => acc + data.totalBirdsSold, 0) || salesData.reduce((acc, data) => acc + data.totalEggsSold, 0);
   const totalRevenueAcc = salesData.reduce((acc, data) => acc + data.totalProfit, 0);
 
-  console.log('shales DATA', totalItemSoldAcc)
 
 
   const chartOptions = {
@@ -67,21 +66,35 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
     <Grid className={'paddingBottom'} container spacing={3} sx={{ mt: 3 }}>
       {/* Summary Cards */}
       <Grid size={{ xs: 12, sm: 6 }}>
-        <Card sx={{ backgroundColor: theme.palette.secondary.main, p: 2 }}>
-          <CardContent sx={{
-            cursor: 'pointer',
-            transition: "0.3s",
-            "&:hover": {
-              transform: "translateY(-10px)"
-            }
-          }}>
-            <Typography variant="h6" fontWeight="bold" color={theme.palette.text.white}>{totalSoldTitle}</Typography>
-            <Typography color={theme.palette.text.white} variant="h4">{formatNumber(totalItemSoldAcc)}</Typography>
-          </CardContent>
-        </Card>
+        {queryLoading ?(
+              <Box display={"flex"} flexDirection={'column'} gap={3}>
+              <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={100} />
+           
+          </Box>
+        ) : (
+
+          <Card sx={{ backgroundColor: theme.palette.secondary.main, p: 2 }}>
+            <CardContent sx={{
+              cursor: 'pointer',
+              transition: "0.3s",
+              "&:hover": {
+                transform: "translateY(-10px)"
+              }
+            }}>
+              <Typography variant="h6" fontWeight="bold" color={theme.palette.text.white}>{totalSoldTitle}</Typography>
+              <Typography color={theme.palette.text.white} variant="h4">{formatNumber(totalItemSoldAcc)}</Typography>
+            </CardContent>
+          </Card>
+        )}
       </Grid>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <Card sx={{ backgroundColor: theme.palette.secondary.main, p: 2 }}>
+        {queryLoading ? (
+              <Box display={"flex"} flexDirection={'column'} gap={3}>
+              <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={100} />
+       
+          </Box>
+        ) : (
+          <Card sx={{ backgroundColor: theme.palette.secondary.main, p: 2 }}>
           <CardContent
             sx={{
               cursor: 'pointer',
@@ -96,6 +109,8 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
             }{formatNumber(totalRevenueAcc)}</Typography>
           </CardContent>
         </Card>
+        )}
+        
       </Grid>
 
       {/* Sales Chart */}
@@ -105,7 +120,17 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               Monthly Sales Chart
             </Typography>
-            <Chart options={chartOptions} series={chartSeries} type="bar" height={250} />
+            {queryLoading ? (
+                  <Box display={"flex"} flexDirection={'column'} gap={3}>
+                  <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={200} />
+                 
+                  {/* <Skeleton variant="rectangular" width={"100%"} height={20} />
+                      <Skeleton variant="rectangular" width={"100%"} height={20} /> */}
+              </Box>
+            ) : (
+
+              <Chart options={chartOptions} series={chartSeries} type="bar" height={250} />
+            )}
           </CardContent>
         </Card>
       </Grid>
@@ -117,7 +142,19 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               Detailed Sales Report
             </Typography>
-            <TableContainer component={Paper}>
+
+            {queryLoading ? (
+               <Box display={"flex"} flexDirection={'column'} gap={3}>
+                <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                {/* <Skeleton variant="rectangular" width={"100%"} height={20} />
+                    <Skeleton variant="rectangular" width={"100%"} height={20} /> */}
+            </Box>
+            ) : (
+             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -136,12 +173,14 @@ export const SalesReportComponent = ({ salesData, chartSeriesName, totalSoldTitl
                     </TableRow>
                   ))}
                 </TableBody>
-              </Table>
-            </TableContainer>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+              </Table >
+            </TableContainer >  
+            )}
+           
+          </CardContent >
+        </Card >
+      </Grid >
+    </Grid >
   );
 };
 

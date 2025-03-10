@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DataTable } from '../../components/DataTable';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Skeleton } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import BirdIcon from '../../components/BirdIcon';
 import { GiChicken } from "react-icons/gi";
@@ -176,7 +176,7 @@ export const FarmMgntBird = () => {
 
             console.log('id at the end', values.id)
 
-            await editPoultryBird({ variables: {id: selectedBird, edit: mergedValues } });
+            await editPoultryBird({ variables: { id: selectedBird, edit: mergedValues } });
 
 
 
@@ -187,13 +187,13 @@ export const FarmMgntBird = () => {
     };
 
     useEffect(() => {
-       if(editData) {
-        setRows((prev)=> {
-             const newData = prev.filter(item => item.id !== selectedBird);
-             setSelectedBird('');
-            return [...newData, editData.editPoultryBird]
-        })
-       }
+        if (editData) {
+            setRows((prev) => {
+                const newData = prev.filter(item => item.id !== selectedBird);
+                setSelectedBird('');
+                return [...newData, editData.editPoultryBird]
+            })
+        }
     }, [editData])
 
     console.log(editData, editError, editLoading)
@@ -206,14 +206,14 @@ export const FarmMgntBird = () => {
         if (!confirmDelete) return;
         await deletePoultryBird({ variables: { id } });
         console.log(id, rows)
-      
+
         // setRows(prev => prev.filter(item => item.id !== id)); // ✅ Correctly updates state
     };
-    useEffect(() =>{
-        if(deleteData) {
+    useEffect(() => {
+        if (deleteData) {
             setRows((prev) => {
-               return prev.filter(item => item.id !== setIdToDelete)
-           })
+                return prev.filter(item => item.id !== setIdToDelete)
+            })
         }
 
     }, [deleteData])
@@ -295,7 +295,21 @@ export const FarmMgntBird = () => {
                     </Grid>
                 </Grid>
 
-                <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+
+                {(loading || addLoading || editLoading || deleteLoading) ?
+                    (<Box display={"flex"} flexDirection={'column'} gap={3}>
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        {/* <Skeleton variant="rectangular" width={"100%"} height={20} />
+                            <Skeleton variant="rectangular" width={"100%"} height={20} /> */}
+                    </Box>)
+                    : <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+                }
+
+
             </Box>
 
             {showForm &&

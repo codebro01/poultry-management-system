@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DataTable } from '../../components/DataTable';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Skeleton } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import BirdIcon from '../../components/BirdIcon';
 import { GiChicken } from "react-icons/gi";
@@ -123,7 +123,7 @@ export const FarmMgntEgg = () => {
     //     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
     // ];
 
-    const { data: eggsData, error: eggsError, loading: loadingError } = useQuery(EGGSQUERY);
+    const { data: eggsData, error: eggsError, loading: eggsLoading } = useQuery(EGGSQUERY);
 
     console.log('alleggs', eggsData?.poultryEggs);
 
@@ -293,7 +293,19 @@ export const FarmMgntEgg = () => {
                     </Grid>
                 </Grid>
 
-                <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+                
+                {(eggsLoading || addLoading || editLoading || deleteLoading) ?
+                    (<Box display={"flex"} flexDirection={'column'} gap={3}>
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        <Skeleton variant="rectangular" animation='pulse' width={"100%"} height={30} />
+                        {/* <Skeleton variant="rectangular" width={"100%"} height={20} />
+                            <Skeleton variant="rectangular" width={"100%"} height={20} /> */}
+                    </Box>)
+                    : <DataTable rows={rows} columns={columns} handleDelete={handleDelete} handleEdit={handleEdit} />
+                }
             </Box>
 
             {showForm &&

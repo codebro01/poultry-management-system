@@ -115,7 +115,7 @@ export const PoultryFeedList = () => {
         <Grid container spacing={3}>
           {poultryFeeds.map((feed) => (
             <Grid item xs={12} sm={6} md={4} key={feed.id}>
-              <PoultryFeedCard feed={feed} />
+              <PoultryFeedCard feed={feed} feedLoading = {feedLoading} addLoading = {addLoading}    />
             </Grid>
           ))}
         </Grid>

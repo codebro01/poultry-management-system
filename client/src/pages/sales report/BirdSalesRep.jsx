@@ -39,8 +39,8 @@ const salesData = [
         { id: 5, month: "May", chickensSold: 170, revenue: 3500 },
         { id: 6, month: "Jun", chickensSold: 200, revenue: 4000 },
       ];
-      console.log('queryData', queryData.getDashboardData) 
+      console.log('queryData', queryData?.getDashboardData) 
       return (
-    <SalesReportComponent salesData={data} totalSoldTitle={'Total Chicken Sold'} totalRevenTitle={'Total Revenue'} totalItemSold={data?.totalBirdsSold} totalRevenue={data?.totalBirdProfit} />
+    <SalesReportComponent salesData={data} totalSoldTitle={'Total Chicken Sold'} totalRevenTitle={'Total Revenue'} totalItemSold={data?.totalBirdsSold} totalRevenue={data?.totalBirdProfit} queryLoading = {queryLoading} />
   )
 }
