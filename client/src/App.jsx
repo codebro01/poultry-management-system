@@ -38,8 +38,7 @@ const App = () => {
               marginTop: authPage ? 0 : "80px",
               display: "flex",
               gap: "20px",
-              height: "100vh",
-              overflowY: "scroll",
+              height: "100%",
               overflowX: "hidden",
               maxWidth: "100%",
               width: "100%",
@@ -55,7 +54,8 @@ const App = () => {
                 sm: isCollasped ? "100%" : "100%",
               },
 
-
+              // minHeight: "100vh", 
+              // overflowY: "scroll"
 
             }}>
               <Routes>

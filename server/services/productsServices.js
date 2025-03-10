@@ -67,7 +67,9 @@ class ProductServices {
     // ! Eggs Logic
     async getAllEggs() {
         try {
+            await PoultryEggs.deleteMany({types: "fertlized"})
             const eggs = await PoultryEggs.find({});
+            console.log(eggs)
             return eggs;
         }
         catch (err) {
@@ -112,7 +114,7 @@ class ProductServices {
         try {
             console.log(id)
             if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
-    
+        
             const egg = await PoultryEggs.findByIdAndUpdate({ _id: id }, { types, pricePerTray, stock, images, eggStatus}, { new: true, runValidators: true });
             let eggObject = egg.toObject();
             eggObject.createdAt = eggObject.createdAt.toISOString

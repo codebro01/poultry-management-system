@@ -131,7 +131,7 @@ export const resolvers = {
             const user = authMiddleware(context);
             RBAC(user, 'admin');
             const { types, pricePerTray, stock, images, eggStatus, totalCost } = egg;
-
+            console.log(Number(totalCost), totalCost)
             // const createdAt = Date.now().toString;
             // console.log(createdAt)
             return productsServices.addEggs({ types, pricePerTray, stock, images, eggStatus, totalCost });

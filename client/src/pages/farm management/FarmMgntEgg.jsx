@@ -23,8 +23,10 @@ export const FarmMgntEgg = () => {
     const theme = useTheme();
     const [rows, setRows] = useState([]);
     const [showForm, setShowForm] = useState(false);
-    const [showEditForm, setEditForm] = useState(false);
+    const [showEditForm, setShowEditForm] = useState(false);
     const [imageUrls, setImagesUrls] = useState([]);
+    const [selectedEgg, setSelectedEgg] = useState('');
+
 
 
     const EGGSQUERY = gql`
@@ -46,20 +48,23 @@ export const FarmMgntEgg = () => {
     addPoultryEgg(egg: $egg) {
         id, types, pricePerTray, stock, images, createdAt eggStatus
     }
-}`
-
-    const handlePopupForm = () => {
-        setShowForm(true);
+    }   
+    `
+    const EDITEGGMUTATION = gql`
+        mutation EditEgg ($id: ID!, $edit: EditPoultryEggInput) {
+        editPoultryEgg(id: $id, edit: $edit) {
+        id, types, pricePerTray, stock, images, createdAt
     }
-
-
-    const handleEdit = (id) => {
-        console.log(`Edit row with ID: ${id}`);
-    };
-
-    const handleDelete = (id) => {
-        console.log(`Delete row with ID: ${id}`);
-    };
+}
+    
+    `
+    const DELETEMUTATION = gql`
+        mutation deleteEggMutation($id: ID!) {
+        deletePoultryEgg(id: $id) {
+        id,types, pricePerTray, stock, images, eggStatus
+    }
+}
+    `
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -86,7 +91,7 @@ export const FarmMgntEgg = () => {
             sortable: false,
             width: 160,
             renderCell: (params) => (
-                <IconButton onClick={() => handleEdit(params.row.id)} color="secondary">
+                <IconButton onClick={() => handleSelectForEdit(params.row.id)} color="secondary">
                     <EditIcon />
                 </IconButton>
             ),
@@ -120,7 +125,7 @@ export const FarmMgntEgg = () => {
 
     const { data: eggsData, error: eggsError, loading: loadingError } = useQuery(EGGSQUERY);
 
-    console.log(eggsData?.poultryEggs);
+    console.log('alleggs', eggsData?.poultryEggs);
 
     useEffect(() => {
         if (eggsData) {
@@ -166,8 +171,108 @@ export const FarmMgntEgg = () => {
             console.log(error)
         }
     }
-    if(addData) console.log(addData)
+    useEffect(() => {
+        if (addData) {
+            setRows((prevData) => {
+                return [...prevData, addData.addPoultryEgg]
+            })
+        }
 
+    }, [addData])
+
+    if (addData) console.log(addData);
+
+
+    const handlePopupForm = () => {
+        setShowForm(true);
+    }
+    const handleSelectForEdit = (id) => {
+        setShowEditForm(true)
+        setSelectedEgg(id);
+        console.log(`Edit row with ID: ${id}`);
+
+    }
+
+    const handlePopupEditForm = () => {
+        setShowEditForm(true)
+    }
+
+    const [editPoultryEgg, { data: editData, error: editError, loading: editLoading }] = useMutation(EDITEGGMUTATION);
+
+    const handleEdit = async (values) => {
+
+        try {
+
+            const formData = new FormData();
+
+            // Ensure `values.images` exists and is an array
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((image) => {
+                    formData.append("images", image); // Append each file separately
+                });
+            } else {
+                return;
+            }
+
+            console.log('id at the middle', values.id)
+
+
+            const uploadImages = await axios.post('http://localhost:5000/upload', formData, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+            })
+            setImagesUrls(uploadImages?.data?.imageUrls)
+
+            console.log('id at before merged', values.id)
+
+            const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
+
+
+            console.log('id at the end', values.id)
+
+            await editPoultryEgg({ variables: { id: selectedEgg, edit: mergedValues } });
+
+
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    };
+
+    useEffect(() => {
+        if (editData) {
+            setRows(prevData => {
+                const filteredData = prevData.filter(data => data.id !== selectedEgg)
+                setSelectedEgg('');
+                return [...filteredData, editData.editPoultryEgg]
+            })
+        }
+    }, [editData])
+
+    const [deletePoultryEgg, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETEMUTATION);
+
+    const handleDelete = async (id) => {
+        try {
+
+            const confirmDelete = window.confirm('Are you sure you want to delete the student?')
+
+            if(!confirmDelete) return;
+
+            await deletePoultryEgg({variables: {id}});
+        }
+        catch(error) {
+            console.log(error)
+        }
+    };
+
+    useEffect(() => {
+        if(deleteData) {
+            setRows(deleteData.deletePoultryEgg);
+        }
+    }, [deleteData])
 
     return (
         <>
@@ -199,8 +304,12 @@ export const FarmMgntEgg = () => {
                     onSubmit={handleSubmit}
                     title={"Add new Item"}
                     fields={[
-                        { name: "types", label: "Type", validation: Yup.string().required("Type is required") },
-                        { name: "pricePerTray", label: "Price Per Tray", type: "number", validation: Yup.number().required("Price is required") },
+                        {
+                            name: "types", type: 'select', label: "Type", options: [
+                                "table",
+                                "fertilized",
+                            ], validation: Yup.string().required("Egg type is required")
+                        }, { name: "pricePerTray", label: "Price Per Tray", type: "number", validation: Yup.number().required("Price is required") },
                         { name: "stock", label: "Stock", type: "number", validation: Yup.number().required("Stock is required") },
                         {
                             name: "eggStatus", type: 'select', label: "Egg Status", options: [
@@ -208,7 +317,7 @@ export const FarmMgntEgg = () => {
                                 "bad",
                             ], validation: Yup.string().required("Total Cost is required")
                         },
-                        { name: "totalCost", label: "Total Cost", validation: Yup.number().required("Total Cost is required") },
+                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
                         { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
 
                     ]}
@@ -223,20 +332,20 @@ export const FarmMgntEgg = () => {
                     onSubmit={handleEdit}
                     title={'Edit Item'}
                     fields={[
-                        { name: "name", label: "Name", validation: Yup.string().required("Name is required") },
-                        { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
-                        { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(1, "Age must be at least 1") },
-                        { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
-                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
-                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
                         {
-                            name: "healthStatus", type: 'select', label: "Health Status", options: [
-                                "sick",
-                                "healthy",
-                                "vaccinated",
-                                "dead",
+                            name: "types", type: 'select', label: "Type", options: [
+                                "table",
+                                "fertilized",
+                            ], validation: Yup.string().required("Egg type is required")
+                        }, { name: "pricePerTray", label: "Price Per Tray", type: "number", validation: Yup.number().required("Price is required") },
+                        { name: "stock", label: "Stock", type: "number", validation: Yup.number().required("Stock is required") },
+                        {
+                            name: "eggStatus", type: 'select', label: "Egg Status", options: [
+                                "good",
+                                "bad",
                             ], validation: Yup.string().required("Total Cost is required")
                         },
+                        { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
                         { name: "images", label: "Upload Photo", type: "file", accept: "image/*", validation: Yup.mixed().required("Image is required") },
 
                     ]}

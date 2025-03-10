@@ -234,6 +234,7 @@ type OrderItem {
   productName: String!
   quantity: Int!
   price: Float!
+  itemOriginalCost: Float
 }
 
 enum OrderCategory {
@@ -279,11 +280,23 @@ input OrderItemInput {
   productName: String!
   quantity: Int!
   price: Float!
+  itemOriginalCost: Float!
 }
 
 type totalPerMonth {
     month: String!
     total: Int!
+}
+
+type birdsMonthlySalesChart {
+    totalProfit: Float!
+    totalBirdsSold: Float!
+    month:String!
+}
+type eggsMonthlySalesChart {
+    totalProfit: Float!
+    totalEggsSold: Float!
+    month:String!
 }
 
 
@@ -295,12 +308,16 @@ type DashboardData {
     deliveryRating: Int!
     totalChicken: Int!
     totalChickenSold: Int!
+    totalBirdProfit: Float!
     mortalityRate: Float!
     totalEggsCollected: Int!
     totalEggsSold: Int!
+    totalEggProfit: Float!
     damageRate: Float!
     eggsProducedPerMonth: [totalPerMonth!]!
     chickenSoldPerMonth: [totalPerMonth!]!
+    monthlyEggSalesChart: [eggsMonthlySalesChart!]
+    monthlyChickenSalesChart: [birdsMonthlySalesChart!]
 }
 
 type Query {

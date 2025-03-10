@@ -1,13 +1,19 @@
 import React from "react";
 import { Card, CardContent, CardMedia, Typography, Button, Chip } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faNairaSign } from "@fortawesome/free-solid-svg-icons";
 
 export const PoultryFeedCard = ({ feed }) => {
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2 }}>
+    <Card sx={{width: {
+      xs: '250px', 
+      sm: "300px", 
+      md: "350"
+    }, boxShadow: 3, borderRadius: 2 }}>
       <CardMedia
         component="img"
         height="200"
-        image={feed.image}
+        image={feed.images[0]}
         alt={feed.name}
       />
       <CardContent>
@@ -21,7 +27,7 @@ export const PoultryFeedCard = ({ feed }) => {
           Weight: {feed.weight} kg
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Price: ${feed.price}
+          Price: <FontAwesomeIcon icon={faNairaSign} />{feed.price}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Stock: {feed.stock} bags

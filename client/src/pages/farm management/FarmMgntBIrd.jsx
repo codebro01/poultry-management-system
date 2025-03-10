@@ -190,6 +190,7 @@ export const FarmMgntBird = () => {
        if(editData) {
         setRows((prev)=> {
              const newData = prev.filter(item => item.id !== selectedBird);
+             setSelectedBird('');
             return [...newData, editData.editPoultryBird]
         })
        }

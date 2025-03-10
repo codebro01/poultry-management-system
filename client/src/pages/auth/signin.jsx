@@ -54,7 +54,7 @@ export default function CredentialsSignInPage() {
   return (
     <Box
       sx={{
-        background: `url("/signin-background.jpg")`,
+        background: `url("/signin-background.webp")`,
         backgroundSize: "cover",
         height: "100vh",
         display: "flex",

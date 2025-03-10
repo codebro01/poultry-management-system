@@ -6,6 +6,7 @@ const OrderItemSchema = new Schema({
     productName: { type: String, required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
+    itemOriginalCost: {type: Number, required: true}
   });
 
 
@@ -34,8 +35,9 @@ const OrderSchema = new Schema({
     status: {
         type: String, 
         enum: ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELED'],
-        default: 'DELIVERED'
-    }, 
+        default: "DELIVERED",
+        required: true,
+        }, 
     customerAddress: {
         type: String,
         required: true,

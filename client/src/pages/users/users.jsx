@@ -1,15 +1,33 @@
 import React from 'react';
 import { DataTable } from '../../components/DataTable';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Skeleton } from '@mui/material';
 import { People } from '@mui/icons-material';
 import {useTheme} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { GridDeleteForeverIcon } from '@mui/x-data-grid';
+import {gql, useQuery} from '@apollo/client';
+import { NoCheckBoxDataTable } from '../../components/noCheckboxSelectionDataTable';
+import { useState, useEffect} from 'react';
 
 export const Users = () => {
     const theme = useTheme();
+    const [users, setUsers] = useState()
+
+    const USERSQUERY = gql`
+        query GetUsers  {
+            users {
+                uid
+                role
+                id
+                username
+                phoneNo
+                email
+                address    
+            }
+}
+    `
 
     const handleEdit = (id) => {
         console.log(`Edit row with ID: ${id}`);
@@ -20,48 +38,51 @@ export const Users = () => {
     };
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First name', width: 130 },
-        { field: 'lastName', headerName: 'Last name', width: 130 },
+        { field: 'uid', headerName: 'ID', width: 70 },
+        { field: 'username', headerName: 'Username', width: 130 },
+        { field: 'email', headerName: 'Email Address', width: 130 },
         {
-          field: 'age',
-          headerName: 'Age',
+          field: 'address',
+          headerName: 'Address',
+          width: 90,
+        },
+        {
+          field: 'phoneNo',
+          headerName: 'Contact No.',
           type: 'number',
           width: 90,
         },
         {
-          field: 'fullName',
-          headerName: 'Full name',
-          description: 'This column has a value getter and is not sortable.',
-          sortable: false,
-          width: 160,
-          valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+          field: 'role',
+          headerName: 'Role',
+          width: 90,
         },
+      
         
-        {
-            field: 'Edit',
-            headerName: 'Edit',
-            description: 'Edit Bird Information',
-            sortable: false,
-            width: 160,
-            renderCell: (params) => (
-                <IconButton onClick={() => handleEdit(params.row.id)} color="secondary">
-                    <EditIcon />
-                </IconButton>
-            ),
-        },
-        {
-            field: 'Delete',
-            headerName: 'Delete',
-            description: 'Delete Bird',
-            sortable: false,
-            width: 160,
-            renderCell: (params) => (
-                <IconButton onClick={() => handleDelete(params.row.id)} color="error">
-                    <GridDeleteForeverIcon />
-                </IconButton>
-            ),
-        },
+        // {
+        //     field: 'Edit',
+        //     headerName: 'Edit',
+        //     description: 'Edit Bird Information',
+        //     sortable: false,
+        //     width: 160,
+        //     renderCell: (params) => (
+        //         <IconButton onClick={() => handleEdit(params.row.id)} color="secondary">
+        //             <EditIcon />
+        //         </IconButton>
+        //     ),
+        // },
+        // {
+        //     field: 'Delete',
+        //     headerName: 'Delete',
+        //     description: 'Delete Bird',
+        //     sortable: false,
+        //     width: 160,
+        //     renderCell: (params) => (
+        //         <IconButton onClick={() => handleDelete(params.row.id)} color="error">
+        //             <GridDeleteForeverIcon />
+        //         </IconButton>
+        //     ),
+        // },
       ];
       
       const rows = [
@@ -76,12 +97,26 @@ export const Users = () => {
         { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
       ];
 
-
+      const {data, error, loading} = useQuery(USERSQUERY);
+      useEffect(() =>{
+        if(data) setUsers(data.users)
+      }, [data])
+      console.log(data)
 
     return (
         <Box display= {"flex"} flexDirection = {"column"}>
             <Typography display={'flex'} justifyContent={'center'} alignItems={'center'} gap={3} variant='h3' bgcolor={theme.palette.secondary.main} color={theme.palette.text.white} padding={{ xs: 2, md: 5 }} textAlign={'center'}>User Management <People /></Typography>
-            <DataTable rows={rows} columns={columns} />
+            {data ? <NoCheckBoxDataTable rows={users} columns={columns} /> :             
+            <Box display={"flex"} flexDirection={'column'} gap = {3}>
+            <Skeleton variant="rectangular" animation = 'pulse' width={"100%"} height={30} />
+            <Skeleton variant="rectangular" animation = 'pulse' width={"100%"} height={30} />
+            <Skeleton variant="rectangular" animation = 'pulse' width={"100%"} height={30} />
+            <Skeleton variant="rectangular" animation = 'pulse' width={"100%"} height={30} />
+            <Skeleton variant="rectangular" animation = 'pulse' width={"100%"} height={30} />
+            {/* <Skeleton variant="rectangular" width={"100%"} height={20} />
+            <Skeleton variant="rectangular" width={"100%"} height={20} /> */}
+            </Box>
+            }
         </Box>
     )
 }

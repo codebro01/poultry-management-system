@@ -14,7 +14,7 @@ class OrderServices {
         }
     }
 
-    async createOrder({ customerAddress, customerName, customerEmail, customerPhone, category, items }) {
+    async createOrder({ customerAddress, customerName, customerEmail, customerPhone, category, items, status }) {
         try {
             console.log(category)
             const totalAmount = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
