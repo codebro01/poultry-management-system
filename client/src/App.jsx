@@ -17,13 +17,18 @@ import { BirdSalesRep } from "./pages/sales report/BirdSalesRep";
 import { EggSalesRep } from "./pages/sales report/EggSalesRep";
 import { Users } from "./pages/users/users";
 import { Orders } from "./pages/orders/orders";
+import { ProductsPage } from "./pages/marketPlace/products";
+import { ResponsiveAppBar } from "./components/AppBar";
 
 const App = () => {
   const authPage = window.location.pathname === '/';
   const [isCollasped, setIsCollapsed] = useState(false);
   const handleSidebarToggle = () => setIsCollapsed(!isCollasped);
+  const path = getPath();
+  
+path.includes('dashboard') ? console.log('admin') : console.log('user');
 
-
+if(path.includes('dashboard') || path.includes('admin')) {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
@@ -58,8 +63,9 @@ const App = () => {
               // overflowY: "scroll"
 
             }}>
+              {/* Admin Routes  */}
               <Routes>
-                <Route path="/" element={<CredentialsSignInPage />}></Route>
+                <Route path="/admin/sign-in" element={<CredentialsSignInPage />}></Route>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 {/* Farm Management Routes */}
                 <Route path="/dashboard/farm-management/bird" element={<FarmMgntBird />}></Route>
@@ -78,6 +84,7 @@ const App = () => {
                 <Route path="/dashboard/orders" element={<Orders />}></Route>
 
 
+
               </Routes>
             </Box>
           </Container>
@@ -86,6 +93,62 @@ const App = () => {
     </ApolloProvider>
   );
 };
+
+return (
+  <ApolloProvider client={client}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+
+        <Container
+          id="container"
+          maxWidth={false}
+          sx={{
+            display: "flex",
+            gap: "20px",
+            height: "100%",
+            overflowX: "hidden",
+            maxWidth: "100%",
+            width: "100%",
+            padding: {
+              xs: 0
+            }
+          }}
+        >
+          <ResponsiveAppBar/>
+          <Box id="main-content" sx={{
+            transition: "0.3s",
+            width: "100%",
+            // minHeight: "100vh", 
+            // overflowY: "scroll"
+            background: theme.palette.text.white
+          }}>
+            
+            <Routes>
+
+
+              {/* Client Routes */}
+              <Route path="/" element={<ProductsPage />}></Route>
+
+
+            </Routes>
+          </Box>
+        </Container>
+      </Router>
+    </ThemeProvider>
+  </ApolloProvider>
+);
+
+}
+
+
+const getPath = () => {
+  const location = window.location.href.split('/');
+  return location;
+}
+
+
+console.log(location)
 
 export default App;
 

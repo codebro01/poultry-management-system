@@ -37,7 +37,7 @@ export default function CredentialsSignInPage() {
 
         
       });
-      navigate('dashboard')
+      navigate('/dashboard')
       console.log('data', data);
       console.log('formData', formData);
 

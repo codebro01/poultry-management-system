@@ -20,7 +20,7 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const location = useLocation();
-    const authPage = location.pathname === '/';
+    const authPage = location.pathname === '/admin/sign-in';
     return (
         <Box marginTop={3} sx={{
             height: "100%",

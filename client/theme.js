@@ -15,6 +15,7 @@ import "@fontsource/poppins/700.css"; // Bold
     },
     secondary: {
       main: "#2E7D32", // Deep Green
+      light: "#73B376;"
     },
     background: {
       default: "#FFF8E1", // Soft Beige
