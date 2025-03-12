@@ -324,7 +324,7 @@ export const FarmMgntBird = () => {
                         { name: "price", label: "Price", type: "number", validation: Yup.number().required("Price is required") },
                         { name: "age", label: "Age(Weeks)", type: "number", validation: Yup.number().required("Age is required").min(0.1, "Age must be at least 1") },
                         { name: "description", label: "Description", validation: Yup.string().required("Description is required") },
-                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required") },
+                        { name: "weight", label: "Weight(kg)", type: "number", validation: Yup.number().required("Weight is required").min(0.1, 'Weight cannot be less that 0.1') },
                         { name: "totalCost", label: "Total Cost", type: "number", validation: Yup.number().required("Total Cost is required") },
                         {
                             name: "healthStatus", type: 'select', label: "Health Status", options: [
