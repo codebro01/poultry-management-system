@@ -13,8 +13,9 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { ShoppingCart } from "@mui/icons-material";
 import { IconButton, Badge } from "@mui/material";
-import { useTheme } from '@emotion/react';
 import { theme } from '../../theme';
+import { useCart } from '../context/cartContext';
+import { Link } from 'react-router-dom';
 
 const pages = ['Products'];
 const settings = ['checkOut'];
@@ -22,7 +23,9 @@ const settings = ['checkOut'];
 export function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  // const cart = JSON.parse(localStorage.getItem('cart'));
+  // console.log(cart)
+  const {cart} =useCart();
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -171,7 +174,7 @@ export function ResponsiveAppBar() {
                   fontSize: "11px",
                   fontWeight: 700,
                   color: theme.palette.text.white
-                }}>0</Typography>
+                }}>{cart.length}</Typography>
               </IconButton>
             </Tooltip>
             <Menu
@@ -192,7 +195,7 @@ export function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  <Link to={'/checkout'}><Typography sx={{ textAlign: 'center' }}>{setting}</Typography></Link>
                 </MenuItem>
               ))}
             </Menu>

@@ -1,5 +1,4 @@
 import { createTheme, responsiveFontSizes  } from "@mui/material";
-import { useTheme } from "@emotion/react";
 import "@fontsource/roboto"; // Defaults to weight 400
 import "@fontsource/roboto/300.css"; // Light
 import "@fontsource/roboto/700.css"; // Bold
@@ -28,7 +27,7 @@ import "@fontsource/poppins/700.css"; // Bold
       primary: "#333333", // Dark grey for readability
       secondary: "#555555",
       white: "#f5f5f5", 
-      darkGrey: "rgb(173, 170, 170)",
+      darkGrey: "rgb(244, 244, 244)",
     },
   },
   typography: {
@@ -56,6 +55,20 @@ import "@fontsource/poppins/700.css"; // Bold
     },
     body1: {
       fontSize: "1rem",
+    },
+    button: {
+      fontWeight: 500,
+      textTransform: "none", // Optional: Prevent uppercase transformation
+      fontSize: "0.6rem", // Default font size
+      "@media (min-width:690px)": { // Small screens (tablets)
+        fontSize: "0.9rem",
+      },
+      "@media (min-width:960px)": { // Medium screens (desktops)
+        fontSize: "1rem",
+      },
+      "@media (min-width:1280px)": { // Large screens
+        fontSize: "1.1rem",
+      },
     },
   },
   breakpoints: {
