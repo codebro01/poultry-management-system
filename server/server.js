@@ -36,9 +36,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-app.use(express.static(path.join(__dirname, '..', 'client', 'dist'))); // Serve static files
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html')); // Handle SPA routing
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Handle SPA routing
 });
 
 app.post('/upload', upload.array('images', 5), cloudinaryImageUploader);

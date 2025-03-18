@@ -15,7 +15,6 @@ class UserServices {
             await newUser.save();
             const user = tokenUser(newUser);
             const token = attachCookieToResponse(context, { user })
-            console.log(newUser, token)
             return newUser;
         }
         catch (err) {
@@ -30,15 +29,12 @@ class UserServices {
         const isValidPassword = await foundUser.comparePwd(password);
         if (!isValidPassword) throw new Error('Invalid Credentials');
         const user = tokenUser(foundUser);
-        console.log('tokenUser', user)
         const token = attachCookieToResponse(context, { user });
-        console.log('token', token)
         return { user, token };
     }
     async getAllUsers() {
         try {
             const allUsers = await User.find({}).sort('-createdAt');
-            console.log('allusers', allUsers)
             return allUsers
         }
         catch (err) {
@@ -47,7 +43,6 @@ class UserServices {
     }
     async updateUser({ id, ...user }) {
         try {
-            console.log(user.user)
             const currentUser = await User.findById({ _id: id });
             if (!currentUser) throw new Error('User does not exist');
             Object.keys(user).forEach(key => {
@@ -55,7 +50,6 @@ class UserServices {
                     currentUser[key] = user.user[key];
                     // currentUser.markModified(key);  // 👈 This forces Mongoose to detect the change
 
-                    console.log(`Updating ${key}:`, user.user); // Debug log
                 }
             });
 
@@ -77,7 +71,6 @@ class UserServices {
 
             const currentUser = await User.findById({ _id: id });
             if (!currentUser) throw new Error('user does not exist');
-            console.log('hello here', id)
 
             const deleteUser = await User.findByIdAndDelete({ _id: id })
 
