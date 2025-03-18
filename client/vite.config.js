@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    outDir: path.resolve(__dirname, '../server/public/'), // Change output directory
-    emptyOutDir: true, // Allow clearing the folder
-},
+//   build: {
+//     outDir: path.resolve(__dirname, '../server/public/'), // Change output directory
+//     emptyOutDir: true, // Allow clearing the folder
+// },
 })
