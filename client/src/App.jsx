@@ -27,7 +27,7 @@ const App = () => {
   const handleSidebarToggle = () => setIsCollapsed(!isCollasped);
   const path = getPath();
 
-  path.includes("dashboard") ? console.log("admin") : console.log("user");
+  // path.includes("dashboard") ? console.log("admin") : console.log("user");
 
   if (path.includes("dashboard") || path.includes("admin")) {
     return (
@@ -166,6 +166,5 @@ const getPath = () => {
   return location;
 };
 
-console.log(location);
 
 export default App;

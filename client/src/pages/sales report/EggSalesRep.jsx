@@ -22,8 +22,7 @@ export const EggSalesRep = () => {
   
   
   const {data: queryData, error: queryError, loading: queryLoading} = useQuery(EGGQUERIES)
-    console.log('queryData', queryData) 
-    console.log('queryError', queryError)
+
 
     useEffect(() => {
       if(queryData) {

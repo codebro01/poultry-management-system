@@ -35,7 +35,6 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
 
-            console.log(response.data); // Should log: Cookies cleared successfully
             navigate('/admin/sign-in');
         } catch (error) {
             console.error("Logout error:", error);

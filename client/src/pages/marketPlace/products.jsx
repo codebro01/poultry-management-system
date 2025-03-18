@@ -57,7 +57,6 @@ export const ProductsPage = () => {
     loading: eggsLoading,
   } = useQuery(EGGSQUERY);
 
-  if (eggsData) console.log(eggsData);
 
   useEffect(() => {
     if (birdsData) {

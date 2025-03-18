@@ -44,7 +44,6 @@ export const PoultryFeedList = () => {
     if (feedData) setPoultryFeeds(feedData.poultryFeeds)
 
   }, [feedData])
-  if (feedData) console.log(feedData.poultryFeeds);
 
 
   const [addPoultryFeed, { data: addData, error: addError, loading: addLoading }] = useMutation(ADDFEEDMUTATION)
@@ -70,15 +69,12 @@ export const PoultryFeedList = () => {
       })
       setImagesUrls(uploadImages?.data?.imageUrls);
 
-      console.log(setImagesUrls, values)
 
       let { name, types, weight, price, stock, description, images, isAvailable } = values;
 
       const isAvailableToBoolean = isAvailable === 'true' ? true : false
-      console.log('check', isAvailable === 'true')
       const mergedValues = { ...values, images: uploadImages?.data?.imageUrls , isAvailable: isAvailableToBoolean};
 
-      console.log('values', mergedValues)
 
 
       await addPoultryFeed({ variables: { feed: mergedValues } });
@@ -99,7 +95,6 @@ export const PoultryFeedList = () => {
     }
   }, [addData])
 
-  if(addData) console.log(addData.addPoultryFeed)
 
   const handleShowForm = () => setShowForm(true)
 

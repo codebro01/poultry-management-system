@@ -32,10 +32,8 @@ export const CartProvider = ({ children }) => {
 
  // Function to remove item from cart
  const removeFromCart = useCallback((itemId) => {
-  console.log("entered remove");
 
   let savedCart = JSON.parse(localStorage.getItem("cart")) || []; // Ensure savedCart is an array
-  console.log("Saved cart before removal:", savedCart);
 
   // Filter out the item
   const updatedCart = savedCart.filter((item) => item.itemId !== itemId);
@@ -44,7 +42,6 @@ export const CartProvider = ({ children }) => {
   setCart(updatedCart);
   localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-  console.log("Updated cart:", updatedCart);
 }, []);
 
 const incrementQuantity = useCallback((itemId) => {

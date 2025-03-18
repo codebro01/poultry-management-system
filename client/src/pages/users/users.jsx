@@ -101,7 +101,6 @@ export const Users = () => {
       useEffect(() =>{
         if(data) setUsers(data.users)
       }, [data])
-      console.log(data)
 
     return (
         <Box display= {"flex"} flexDirection = {"column"}>

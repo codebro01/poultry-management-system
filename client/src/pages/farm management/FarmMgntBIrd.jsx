@@ -135,15 +135,12 @@ export const FarmMgntBird = () => {
 
 
     const handleSelectForEdit = (id) => {
-        console.log("Selected id for edit:", id);
         setSelectedBird(id); // Save the selected bird in state
         setShowEditForm(true); // Open the form for editing
     };
 
 
     const handleEdit = async (values) => {
-        console.log('this is values, values', values)
-        console.log('values', selectedBird)
         setShowEditForm(true)
         try {
 
@@ -158,7 +155,6 @@ export const FarmMgntBird = () => {
                 return;
             }
 
-            console.log('id at the middle', values.id)
 
 
             const uploadImages = await axios.post(`${API_URL}/upload`, formData, {
@@ -169,12 +165,10 @@ export const FarmMgntBird = () => {
             })
             setImagesUrls(uploadImages?.data?.imageUrls)
 
-            console.log('id at before merged', values.id)
 
             const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
 
 
-            console.log('id at the end', values.id)
 
             await editPoultryBird({ variables: { id: selectedBird, edit: mergedValues } });
 
@@ -196,16 +190,13 @@ export const FarmMgntBird = () => {
         }
     }, [editData])
 
-    console.log(editData, editError, editLoading)
 
     const [deletePoultryBird, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETEMUTATION);
     const handleDelete = async (id) => {
         setIdToDelete(id);
-        console.log(`Delete row with ID: ${id}`);
         const confirmDelete = window.confirm(`Are you sure you want to delete the item?`);
         if (!confirmDelete) return;
         await deletePoultryBird({ variables: { id } });
-        console.log(id, rows)
 
         // setRows(prev => prev.filter(item => item.id !== id)); // ✅ Correctly updates state
     };
@@ -218,7 +209,6 @@ export const FarmMgntBird = () => {
 
     }, [deleteData])
 
-    console.log(deleteData)
 
     const handlePopupForm = () => {
         setShowForm(true);
@@ -256,7 +246,6 @@ export const FarmMgntBird = () => {
 
             const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
 
-            console.log('values', mergedValues)
 
 
             await addPoultryBird({ variables: { bird: mergedValues } });

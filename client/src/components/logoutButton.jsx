@@ -4,7 +4,6 @@ import { Box, Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import jsCookie from 'js-cookie';
 
-console.log(jsCookie);
 
 export const LogoutButton = () => {
     const navigate = useNavigate()

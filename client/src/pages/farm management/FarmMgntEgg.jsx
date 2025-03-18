@@ -125,7 +125,6 @@ export const FarmMgntEgg = () => {
 
     const { data: eggsData, error: eggsError, loading: eggsLoading } = useQuery(EGGSQUERY);
 
-    console.log('alleggs', eggsData?.poultryEggs);
 
     useEffect(() => {
         if (eggsData) {
@@ -135,7 +134,6 @@ export const FarmMgntEgg = () => {
 
     const [addPoultryEgg, { data: addData, error: addError, loading: addLoading }] = useMutation(ADDEGGMUTATION);
     const handleSubmit = async (values) => {
-        console.log(values)
         try {
 
             const formData = new FormData();
@@ -161,7 +159,6 @@ export const FarmMgntEgg = () => {
 
             const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
 
-            console.log('values', mergedValues)
 
 
             await addPoultryEgg({ variables: { egg: mergedValues } });
@@ -180,7 +177,6 @@ export const FarmMgntEgg = () => {
 
     }, [addData])
 
-    if (addData) console.log(addData);
 
 
     const handlePopupForm = () => {
@@ -189,7 +185,6 @@ export const FarmMgntEgg = () => {
     const handleSelectForEdit = (id) => {
         setShowEditForm(true)
         setSelectedEgg(id);
-        console.log(`Edit row with ID: ${id}`);
 
     }
 
@@ -214,7 +209,6 @@ export const FarmMgntEgg = () => {
                 return;
             }
 
-            console.log('id at the middle', values.id)
 
 
             const uploadImages = await axios.post(`${API_URL}/upload`, formData, {
@@ -225,12 +219,10 @@ export const FarmMgntEgg = () => {
             })
             setImagesUrls(uploadImages?.data?.imageUrls)
 
-            console.log('id at before merged', values.id)
 
             const mergedValues = { ...values, images: uploadImages?.data?.imageUrls };
 
 
-            console.log('id at the end', values.id)
 
             await editPoultryEgg({ variables: { id: selectedEgg, edit: mergedValues } });
 

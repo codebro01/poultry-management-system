@@ -41,13 +41,11 @@ export const Orders = () => {
     `
 
 
-    const handleEdit = (id) => {
-        console.log(`Edit row with ID: ${id}`);
-    };
+    // const handleEdit = (id) => {
+    // };
 
-    const handleDelete = (id) => {
-        console.log(`Delete row with ID: ${id}`);
-    };
+    // const handleDelete = (id) => {
+    // };
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -175,7 +173,6 @@ export const Orders = () => {
     useEffect(() => {
         if (data) setOrders(data.listOrders);
     }, [data])
-    console.log(data)
 
     return (
         <Box display={"flex"} flexDirection={"column"}>

@@ -82,7 +82,6 @@ export const Dashboard = () => {
   const { data, error, loading } = useQuery(DASHBOARDDATAQUERY);
 
   // if(loading) return <Typography>Loading.........</Typography>
-  console.log('error', error)
   if (error) return <Typography>{'error'}</Typography>
 
   const totalProfit = data?.getDashboardData?.totalProfit ?? 'N/A';
@@ -121,7 +120,6 @@ export const Dashboard = () => {
     return {id: `${order.customerEmail}-${index}`, customer: order.customerName, item: order.items.map(item => item.price), price: order.totalAmount}
   }) : []
   
-  console.log(data)
 
   return (
 

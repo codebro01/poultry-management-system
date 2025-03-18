@@ -25,7 +25,7 @@ export function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   // const cart = JSON.parse(localStorage.getItem('cart'));
   // console.log(cart)
-  const {cart} =useCart();
+  const { cart } = useCart();
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -42,11 +42,12 @@ export function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar  bgColor={"secondary"} sx = {{
+    <AppBar sx={{
+      backgroundColor: theme.palette.secondary.main,
       position: "fixed"
     }}>
       <Container maxWidth="xl" >
-        <Toolbar disableGutters  sx = {{
+        <Toolbar disableGutters sx={{
           display: "flex",
           justifyContent: "space-around"
         }}>
@@ -78,7 +79,7 @@ export function ResponsiveAppBar() {
               textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", // Soft shadow effect
               display: {
                 xs: "none",
-                md: "flex", 
+                md: "flex",
                 width: "60%"
               }
             }}
@@ -87,7 +88,7 @@ export function ResponsiveAppBar() {
             wura ola poultry farm
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none', justifyContent: "space-around"} }}>
+          <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none', justifyContent: "space-around" } }}>
             <IconButton
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -115,15 +116,16 @@ export function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  <Link to={"/"}>                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-         
-         
-         
-         
+
+
+
+
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h3"
@@ -136,7 +138,7 @@ export function ResponsiveAppBar() {
               display: {
                 xs: "flex",
                 md: "none",
-                textAlign:"center"
+                textAlign: "center"
               }
             }}
 
@@ -148,7 +150,7 @@ export function ResponsiveAppBar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', background: theme.palette.secondary.light}}
+                sx={{ my: 2, color: 'white', display: 'block', background: theme.palette.secondary.light }}
               >
                 {page}
               </Button>

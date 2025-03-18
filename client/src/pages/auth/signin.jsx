@@ -27,7 +27,6 @@ export default function CredentialsSignInPage() {
 
   // Function to handle sign-in
   const signIn = async (provider, formData) => {
-    console.log(provider, formData)
     try {
       const { data } = await loginUser({
         variables: {
@@ -38,8 +37,7 @@ export default function CredentialsSignInPage() {
         
       });
       navigate('/dashboard')
-      console.log('data', data);
-      console.log('formData', formData);
+
 
       alert(`Login Successful! Token: ${data.loginUser.user.username}`);
     } catch (err) {
