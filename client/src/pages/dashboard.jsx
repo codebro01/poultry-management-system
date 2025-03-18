@@ -93,9 +93,8 @@ export const Dashboard = () => {
   const totalEggsCollected = data?.getDashboardData?.totalEggsCollected ?? 'N/A';
   const totalEggsSold = data?.getDashboardData?.totalEggsSold ?? 'N/A';
   const damageRate = data?.getDashboardData?.damageRate ?? 'N/A';
-  const customerOrders = data?.getDashboardData?.customerOrders ?? 'N/A';+
+  const customerOrders = data?.getDashboardData?.customerOrders ?? 'N/A';
 
-  console.log(typeof mortalityRate); // Should be "number"
   const chickenReport = [
     { label: "Total Chickens", value: totalChicken },
     { label: "Total Sold", value: totalChickenSold },

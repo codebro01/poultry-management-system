@@ -29,9 +29,7 @@ export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIc
             alignItems: "center"
         }}>
             <Box sx={{display: "flex", justifyContent:"left", alignItems: "left", flexDirection: "column", gap:"10px"}}>
-                <Typography variant='h5' color={theme.palette.text.white} sx={{
-                    color: theme.palette.text.darkGrey
-                }}>{subTitle}</Typography>
+                <Typography variant='h5' color={theme.palette.text.secondary} >{subTitle}</Typography>
                 <Typography variant='h2'><FontAwesomeIcon icon={faNairaSign} /> {loading ? (<CircularProgress size= {24}/>) : formatNumber(title)}</Typography>
                 <Box sx={{display: "flex", justifyContent:"flex-start", alignItems: "center", gap:"10px"}}>
                     <Box>{iconText}</Box>

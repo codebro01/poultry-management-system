@@ -5,7 +5,6 @@ export const createJWT = ({payload}) => jwt.sign(payload,process.env.ACCESS_TOKE
 export const verifyJWT = ({token}) => jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 export const attachCookieToResponse = (context, {user}) =>{
-    console.log('tok')
     const token = createJWT({payload: user});
     context.res.cookie('token', token, {
         httpOnly: true, 

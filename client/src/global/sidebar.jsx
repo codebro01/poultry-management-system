@@ -15,12 +15,35 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import React, { useState } from 'react'
 import { Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { LogoutButton } from '../components/logoutButton';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'
+import axios from 'axios';
+
 
 export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const location = useLocation();
     const authPage = location.pathname === '/admin/sign-in';
+    const API_URL = `${import.meta.env.VITE_API_URL}`
+
+
+    const navigate = useNavigate()
+    const handleLogout = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
+
+            console.log(response.data); // Should log: Cookies cleared successfully
+            navigate('/admin/sign-in');
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    };
+
+
+
     return (
         <Box marginTop={3} sx={{
             height: "100%",
@@ -28,8 +51,8 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
             left: 0,
             top: "56px",
             backgroundColor: theme.palette.background.paper,
-            display: authPage ? 'none' : null, 
-            zIndex: 99999999
+            display: authPage ? 'none' : null,
+            zIndex: 99
 
         }} >
             <Box
@@ -54,6 +77,7 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
                     height: "calc(100vh - 80px)",
                     paddingTop: isCollasped ? "80px" : "60px",
                     backgroundColor: theme.palette.background.paper,
+                    display: "flex",
                     // [`.${sidebarClasses.container}`]: {
                     //     backgroundColor: theme.palette.background.paper,
                     // },
@@ -74,7 +98,9 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
                                     ".ps-submenu-expand-icon": {
                                         fontSize: "10px",
                                         color: theme.palette.primary.main
-                                    }
+                                    },
+
+
 
                                 };
                         },
@@ -110,6 +136,25 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
                     >
                         Orders
                     </MenuItem>
+
+                    <Box sx = {{
+                        display: "flex", 
+                        flexDirection:"column", 
+                        height: "100%", 
+                        marginTop: "auto",
+                
+                    }}
+                    onClick = {handleLogout}
+                    >
+                        <MenuItem
+                            icon={<LogoutIcon />}
+                            component={<Link to={'/dashboard/orders'} />}
+                        >
+                            Logout
+                        </MenuItem>
+                        {/* <LogoutButton /> */}
+
+                    </Box>
                     {/* <MenuItem>   {isSmallScreen ? "Small Screen" : "Large Screen"} </MenuItem> */}
                 </Menu>
             </Sidebar>

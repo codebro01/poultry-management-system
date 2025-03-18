@@ -217,7 +217,7 @@ export const FarmMgntEgg = () => {
             console.log('id at the middle', values.id)
 
 
-            const uploadImages = await axios.post('http://localhost:5000/upload', formData, {
+            const uploadImages = await axios.post(`${API_URL}/upload`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data", // Important for file uploads

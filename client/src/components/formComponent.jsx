@@ -1,73 +1,3 @@
-// import React from "react";
-// import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from "@mui/material";
-// import { Formik, Form, Field } from "formik";
-// import * as Yup from "yup";
-// import Grid from '@mui/material/Grid2'
-
-// export const ReusableForm = ({ open, onClose, onSubmit, fields, title }) => {
-//     // Define Yup validation schema dynamically
-//     const validationSchema = Yup.object().shape(
-//         fields.reduce((acc, field) => {
-//             acc[field.name] = field.validation || Yup.string().required(`${field.label} is required`);
-//             return acc;
-//         }, {})
-//     );
-
-//     // Set initial values dynamically
-//     const initialValues = fields.reduce((acc, field) => {
-//         acc[field.name] = "";
-//         return acc;
-//     }, {});
-
-//     return (
-//         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-//             <DialogTitle>{title || "Form"}</DialogTitle>
-//             <DialogContent>
-//                 <Formik
-//                     initialValues={initialValues}
-//                     validationSchema={validationSchema}
-//                     onSubmit={(values) => {
-//                         onSubmit(values);
-//                         onClose(); // Close modal after submit
-//                     }}
-//                 >
-//                     {({ errors, touched, handleChange, handleBlur }) => (
-//                         <Form>
-//                             <Grid container columnGap={10}>
-//                                 {fields.map((field) => (
-//                                     <Grid display="flex" justifyContent="center" alignItems="center" width={"100%"} size={{ xs: 12, sm: 5 }} key={field.name} sx={{
-//                                         marginBottom: "1rem", margin: "5px"
-//                                     }}>
-//                                         <TextField
-//                                             fullWidth
-//                                             size="small"
-//                                             name={field.name}
-//                                             label={field.label}
-//                                             type={field.type || "text"}
-//                                             variant="outlined"
-//                                             onChange={handleChange}
-//                                             onBlur={handleBlur}
-//                                             error={touched[field.name] && Boolean(errors[field.name])}
-//                                             helperText={touched[field.name] && errors[field.name]}
-//                                         />
-//                                     </Grid>
-//                                 ))}
-//                             </Grid>
-
-
-
-//                             <DialogActions>
-//                                 <Button onClick={onClose} color="secondary">Cancel</Button>
-//                                 <Button type="submit" color="primary" variant="contained">Submit</Button>
-//                             </DialogActions>
-//                         </Form>
-//                     )}
-//                 </Formik>
-//             </DialogContent>
-//         </Dialog>
-//     );
-// };
-
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from "@mui/material";
 import { Formik, Form, Field } from "formik";
@@ -103,7 +33,7 @@ export const ReusableForm = ({ open, onClose, onSubmit, fields, title }) => {
             onClose(); // Close modal after submit
           }}
         >
-          {({ errors, touched, handleChange, handleBlur, setFieldValue }) => (
+          {({ errors, touched, handleChange, handleBlur, setFieldValue, values}) => (
             <Form>
               <Grid container spacing={2}>
                 {fields.map((field) => (
@@ -116,7 +46,7 @@ export const ReusableForm = ({ open, onClose, onSubmit, fields, title }) => {
                         name={field.name}
                         label={field.label}
                         variant="outlined"
-                        value={field.options[0]} // Default value
+                        value={values[field.name] || ""} // Default value
                         onChange={handleChange}
                         onBlur={handleBlur}
                         error={touched[field.name] && Boolean(errors[field.name])}
