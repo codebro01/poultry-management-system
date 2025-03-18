@@ -60,7 +60,6 @@ export const resolvers = {
 
         // ! Dashboard Data Query
         getDashboardData: (_, args, context) => {
-            console.log('hello')
             const user = authMiddleware(context);
             RBAC(user, 'admin')
             return dashboardServices.getDashboardData();
@@ -96,7 +95,6 @@ export const resolvers = {
 
         //  * Add Birds
         addPoultryBird: (_, { bird }, context) => {
-            console.log('entered create bird by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
             const { name, price, description, age, healthStatus, weight, images, totalCost } = bird;
@@ -105,7 +103,6 @@ export const resolvers = {
 
         //  * Add Birds
         editPoultryBird: (_, { id, edit }, context) => {
-            console.log('entered update bird by admin', id, edit)
 
             const user = authMiddleware(context);
             RBAC(user, 'admin');
@@ -127,11 +124,9 @@ export const resolvers = {
 
         //  * Add Eggs
         addPoultryEgg: (_, { egg }, context) => {
-            console.log('entered create egg by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
             const { types, pricePerTray, stock, images, eggStatus, totalCost } = egg;
-            console.log(Number(totalCost), totalCost)
             // const createdAt = Date.now().toString;
             // console.log(createdAt)
             return productsServices.addEggs({ types, pricePerTray, stock, images, eggStatus, totalCost });
@@ -139,7 +134,6 @@ export const resolvers = {
 
         //  * Edit Eggs
         editPoultryEgg: (_, { id, edit }, context) => {
-            console.log('entered update bird by admin', id, edit)
 
             const user = authMiddleware(context);
             RBAC(user, 'admin');
@@ -165,7 +159,6 @@ export const resolvers = {
         // ! Poultry Feeds Mutation
 
         addPoultryFeed: (_, { feed }, context) => {
-            console.log('entered create bird by admin')
             const user = authMiddleware(context);
             RBAC(user, 'admin');
             const { name, types, weight, price, stock, description, images, isAvailable } = feed;
@@ -174,7 +167,6 @@ export const resolvers = {
 
         //  * Add Birds
         editPoultryFeed: (_, { id, edit }, context) => {
-            console.log('entered update bird by admin', id, edit)
 
             const user = authMiddleware(context);
             RBAC(user, 'admin');

@@ -16,10 +16,7 @@ class OrderServices {
 
     async createOrder({ customerAddress, customerName, customerEmail, customerPhone, category, items, status }) {
         try {
-            console.log(category)
             const totalAmount = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            console.log('totalAmount', totalAmount)
-            console.log('items', items)
             const order = new Order({ customerAddress, customerName, customerEmail, customerPhone, items, totalAmount, category });
             await order.save();
 

@@ -42,7 +42,6 @@ class DashboardServices {
 
 
     const totalChicken = await PoultryBirds.countDocuments({ healthStatus: { $ne: "dead" } });
-    console.log(totalChicken)
 
     const totalChickenSold = await Order.countDocuments({ category: "bird", status: "DELIVERED" });
 

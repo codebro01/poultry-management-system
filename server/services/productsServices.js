@@ -20,9 +20,7 @@ class ProductServices {
     async getSingleBird({ id }) {
       try {
         if (!id) throw customError('Invalid Id ', 'BAD REQUEST', StatusCodes.BAD_REQUEST)
-            console.log(id)
             const bird = await PoultryBirds.findOne({ _id: id });
-            console.log(bird);
             return bird;
       }
       catch(error) {
@@ -44,11 +42,10 @@ class ProductServices {
     }
 
     async updateBird({ id, totalCost, name, price, description, age, healthStatus, weight }) {
-        console.log(id)
+
         if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
 
         const bird = await PoultryBirds.findByIdAndUpdate({ _id: id }, { totalCost, name, price, description, age, healthStatus, weight, }, { new: true, runValidators: true });
-        console.log(bird)
         return bird
 
     }
@@ -69,7 +66,6 @@ class ProductServices {
         try {
             await PoultryEggs.deleteMany({types: "fertlized"})
             const eggs = await PoultryEggs.find({});
-            console.log(eggs)
             return eggs;
         }
         catch (err) {
@@ -79,9 +75,7 @@ class ProductServices {
 
     async getSingleEgg({ id }) {
         if (!id) throw customError('Invalid Id ', 'BAD REQUEST', StatusCodes.BAD_REQUEST)
-        console.log(id)
         const egg = await PoultryEggs.findOne({ _id: id });
-        console.log(egg);
         return egg;
     }
 
@@ -92,7 +86,6 @@ class ProductServices {
 
             let { createdAt } = egg;
             createdAt = createdAt.toISOString().split("T")[0]
-            console.log(createdAt)
             return {
                 id: egg._id,
                 types: egg.types,
@@ -112,7 +105,6 @@ class ProductServices {
 
     async updateEgg({ id, types, pricePerTray, stock, images, eggStatus }) {
         try {
-            console.log(id)
             if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
         
             const egg = await PoultryEggs.findByIdAndUpdate({ _id: id }, { types, pricePerTray, stock, images, eggStatus}, { new: true, runValidators: true });
@@ -120,7 +112,6 @@ class ProductServices {
             eggObject.createdAt = eggObject.createdAt.toISOString
             ().split("T")[0]
             eggObject.id = eggObject._id;
-            console.log(eggObject)
             return eggObject
         }
         catch(error) {
@@ -133,10 +124,8 @@ class ProductServices {
         try {
             if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
             const deletedEgg = await PoultryEggs.findByIdAndDelete({ _id: id });
-            console.log(deletedEgg)
         }
         catch(error) {
-            console.log(error)
             throw customError('An error occured deleting egg, egg id is invalid', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
         }
     }
@@ -157,9 +146,7 @@ class ProductServices {
     async getSingleFeed({ id }) {
      try {
         if (!id) throw customError('Invalid Id ', 'BAD REQUEST', StatusCodes.BAD_REQUEST)
-            console.log(id)
             const feed = await PoultryFeeds.findOne({ _id: id });
-            console.log(feed);
             return feed;
      }
      catch(error) {
@@ -171,7 +158,6 @@ class ProductServices {
         try {
             const feed = new PoultryFeeds({ name, types, weight, price, stock, description, images, isAvailable });
             await feed.save();
-            console.log(feed)
 
             return feed
         }
@@ -183,11 +169,9 @@ class ProductServices {
 
     async updateFeed({ id, name, types, weight, price, stock, description, images, isAvailable }) {
       try {
-        console.log(id)
         if (!id) throw customError('Invalid Id', 'BAD REQUEST', StatusCodes.BAD_REQUEST);
 
         const feed = await PoultryFeeds.findByIdAndUpdate({ _id: id }, { name, types, weight, price, stock, description, images, isAvailable }, { new: true, runValidators: true });
-        console.log(feed)
         return feed
       } catch (error) {
         throw customError('An error occured updating the feed', 'INTERNAL SERVER ERROR', StatusCodes.INTERNAL_SERVER_ERROR);
