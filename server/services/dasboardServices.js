@@ -190,7 +190,6 @@ class DashboardServices {
     const totalEggProfit = monthlyEggSalesChart.reduce((acc, item) => acc + item.totalProfit, 0);
     const totalProfit = totalBirdProfit + totalEggProfit
 
-    console.log(totalProfit, monthlyChickenSalesChart, monthlyEggSalesChart);
 
   
 
