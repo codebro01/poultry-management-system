@@ -1,5 +1,5 @@
 import { useCart } from "../../context/cartContext";
-import { Container, Typography, Paper, Box, IconButton } from "@mui/material";
+import { Container, Typography, Paper, Box, IconButton, Button } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import RemoveRoundedIcon from "@mui/icons-material/RemoveRounded";
@@ -8,6 +8,7 @@ import { NairaIcon } from "../../components/NairaComponent";
 import { useTheme } from "@mui/material";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { Link } from "react-router-dom";
+import react, { useEffect, useState } from "react";
 
 import React from "react";
 
@@ -17,6 +18,68 @@ const cart = JSON.parse(localStorage.getItem('cart'));
   const formatNumber = (num) => num.toLocaleString("en-NG");
   const theme = useTheme();
     const {removeFromCart, incrementQuantity, decrementQuantity} = useCart();
+
+  const API_publicKey = "FLWPUBK_TEST-548ec83b6909454bc7bbb3a930c51d8a-X";
+  const [flutterwaveLoaded, setFlutterwaveLoaded] = useState(false);
+
+  useEffect(() => {
+    // Check if the script is already added
+    if (!document.querySelector("#flutterwave-script")) {
+      const script = document.createElement("script");
+      script.id = "flutterwave-script";
+      script.src = "https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js";
+      script.async = true;
+      script.onload = () => {
+        console.log("Flutterwave script loaded");
+        setFlutterwaveLoaded(true);
+      };
+      script.onerror = () => console.error("Failed to load Flutterwave script");
+      document.body.appendChild(script);
+    } else {
+      setFlutterwaveLoaded(true);
+    }
+  }, []);
+
+  function payWithRave() {
+    if (!flutterwaveLoaded) {
+      console.error("Flutterwave script not loaded");
+      return;
+    }
+
+    const x = window.getpaidSetup({
+      PBFPubKey: API_publicKey,
+      customer_email: "user@example.com",
+      amount: 2000,
+      customer_phone: "234099940409",
+      currency: "NGN",
+      txref: "rave-123456",
+      meta: [
+        {
+          metaname: "flightID",
+          metavalue: "AP1234",
+        },
+      ],
+      onclose: function () {
+        console.log("Payment closed");
+      },
+      callback: function (response) {
+        console.log("Payment response:", response);
+        if (
+          response.data.chargeResponseCode === "00" ||
+          response.data.chargeResponseCode === "0"
+        ) {
+          alert("Payment successful!");
+        } else {
+          alert("Payment failed!");
+        }
+        x.close();
+      },
+    });
+  }
+
+
+
+
   return (
     <Container
       sx={{
@@ -197,8 +260,7 @@ const cart = JSON.parse(localStorage.getItem('cart'));
             >
               Total: <NairaIcon/> {formatNumber(cart.reduce((acc, item) => acc + item.productPrice * item.quantity, 0))}
             </Typography>
-            <Link to={"/checkout/payment"}>
-              <Typography
+              <Box
                 display={"flex"}
                 alignItems={"center"}
                 gap={5}
@@ -212,12 +274,11 @@ const cart = JSON.parse(localStorage.getItem('cart'));
                   cursor: "pointer",
                 }}
               >
-                Continue to payment{" "}
+              <Button onClick={payWithRave }>Continue to payment</Button>
                 <ArrowForwardRoundedIcon
                   sx={{ color: theme.palette.secondary.main }}
                 />{" "}
-              </Typography>
-            </Link>
+              </Box>
           </Paper>
         </Box>
       </Paper>

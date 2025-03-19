@@ -34,7 +34,7 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
     const handleLogout = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
-
+            console.log(response)
             navigate('/admin/sign-in');
         } catch (error) {
             console.error("Logout error:", error);
@@ -147,7 +147,6 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
                     >
                         <MenuItem
                             icon={<LogoutIcon />}
-                            component={<Link to={'/dashboard/orders'} />}
                         >
                             Logout
                         </MenuItem>
