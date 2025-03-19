@@ -23,6 +23,8 @@ const settings = ['checkOut'];
 export function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const authPage = location.pathname === '/sign-in';
+
   // const cart = JSON.parse(localStorage.getItem('cart'));
   // console.log(cart)
   const { cart } = useCart();
@@ -44,7 +46,8 @@ export function ResponsiveAppBar() {
   return (
     <AppBar sx={{
       backgroundColor: theme.palette.secondary.main,
-      position: "fixed"
+      position: "fixed", 
+      display: authPage ? 'none' : "flex",
     }}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters sx={{

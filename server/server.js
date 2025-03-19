@@ -14,6 +14,7 @@ import { upload } from './config/multer.js';
 import { cloudinaryImageUploader } from './utils/cloudinaryImageUploader.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { Router } from './routes/apiRoutes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
@@ -36,34 +37,24 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
+
+app.post('/upload', upload.array('images', 5), cloudinaryImageUploader);
+
+
+
+app.use("/api", Router);
+
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html')); // Handle SPA routing
 });
 
-app.post('/upload', upload.array('images', 5), cloudinaryImageUploader);
-
-app.get('/logout', (req, res) => {
-    try {
-        res.clearCookie("token", {
-            httpOnly: true,
-            secure: true,  // Ensure this matches the original cookie settings
-            sameSite: "none",
-            path: "/" // Ensure the path matches how it was set
-        });
-
-        return res.status(200).json({ "message": "Cookies cleared successfully" });
-
-    } catch (error) {
-        console.error("Error clearing cookie:", error);
-        res.status(500).json({ "message": "Error clearing cookie" });
-    }
-});
+// app.get('/api/check-cookie', )
 
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html')); // Adjust accordingly
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'index.html')); // Adjust accordingly
+// });
 
 
 const startServer = async () => {

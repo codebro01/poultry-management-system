@@ -36,7 +36,11 @@ export default function CredentialsSignInPage() {
 
         
       });
-      navigate('/dashboard')
+
+      if (data.loginUser.user.username === 'admin') navigate('/dashboard')
+        else {
+          navigate('/')
+        }
 
 
       alert(`Login Successful! Token: ${data.loginUser.user.username}`);

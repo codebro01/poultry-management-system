@@ -33,7 +33,7 @@ export const SidebarComponent = ({ handleSidebarToggle, isCollasped }) => {
     const navigate = useNavigate()
     const handleLogout = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/logout`, { withCredentials: true });
             console.log(response)
             navigate('/admin/sign-in');
         } catch (error) {

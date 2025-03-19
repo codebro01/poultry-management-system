@@ -151,6 +151,7 @@ const App = () => {
                   {/* Client Routes */}
                   <Route path="/" element={<ProductsPage />}></Route>
                   <Route path="/checkout" element={<CheckOutPage />}></Route>
+                  <Route path="/sign-in" element={<CredentialsSignInPage />}></Route>
                 </Routes>
               </Box>
             </Container>
