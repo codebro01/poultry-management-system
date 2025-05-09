@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import 'express-async-errors'
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
 import { expressMiddleware } from '@apollo/server/express4'
 import express from 'express';
 import { resolvers } from './graphql/resolvers/resolver.js';
@@ -12,6 +11,7 @@ import { startDB } from './db/connectDb.js';
 import cors from 'cors';
 import { upload } from './config/multer.js';
 import { cloudinaryImageUploader } from './utils/cloudinaryImageUploader.js';
+import predictChickenHealthStatus from './routes/chickenHealthStatusModel.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Router } from './routes/apiRoutes.js';
@@ -33,12 +33,13 @@ app.use(cors({
     methods: ['POST', 'OPTIONS']
 }))
 
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-
 app.post('/upload', upload.array('images', 5), cloudinaryImageUploader);
+app.use('/api/v1/predict', predictChickenHealthStatus)
 
 
 
@@ -68,7 +69,7 @@ const startServer = async () => {
     app.use('/graphql', expressMiddleware(server, {
         context: async ({ req, res }) => ({ req, res })
     }))
-    app.listen(5000, () => console.log('🚀 Awesome, app connected to port', 5000))
+    app.listen(5100, () => console.log('🚀 Awesome, app connected to port', 5100))
 
 }
 
