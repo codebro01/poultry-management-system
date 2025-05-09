@@ -11,7 +11,7 @@ export const Topbar = () => {
     const authPage = location.pathname === '/'
 
     return (
-        <Container component={'paper'} maxWidth={false} sx={{ position: "fixed", top: 0, left: 0, right: 0, display: authPage ? 'none' : "flex", justifyContent: "space-between", padding: "10px", margin: 0, width: "100%", background: theme.palette.background['paper'], alignItems: "center" }}>
+        <Container component={'paper'} maxWidth={false} sx={{ position: "fixed", top: 0, zIndex:9999999 , left: 0, right: 0, display: authPage ? 'none' : "flex", justifyContent: "space-between", padding: "10px", margin: 0, width: "100%", background: theme.palette.background['paper'], alignItems: "center" }}>
             <Box marginLeft={3} sx={{ textAlign: "center", p: 2, zIndex: 99999999 }}>
                 <Typography
                     variant="h3"
