@@ -57,6 +57,8 @@ app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'public', 'index.html')); // Adjust accordingly
 // });
 
+const PORT = 4000 || process.env.PORT;
+
 
 const startServer = async () => {
     await startDB();
@@ -69,7 +71,7 @@ const startServer = async () => {
     app.use('/graphql', expressMiddleware(server, {
         context: async ({ req, res }) => ({ req, res })
     }))
-    app.listen(5100, () => console.log('🚀 Awesome, app connected to port', 5100))
+    app.listen(PORT, () => console.log('🚀 Awesome, app connected to port', PORT))
 
 }
 

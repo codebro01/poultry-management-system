@@ -8,7 +8,7 @@ import { LogoutButton } from '../components/logoutButton';
 export const Topbar = () => {
     const theme = useTheme();
     const location = useLocation();
-    const authPage = location.pathname === '/'
+    const authPage = location.pathname === '/admin/sign-in'
 
     return (
         <Container component={'paper'} maxWidth={false} sx={{ position: "fixed", top: 0, zIndex:9999999 , left: 0, right: 0, display: authPage ? 'none' : "flex", justifyContent: "space-between", padding: "10px", margin: 0, width: "100%", background: theme.palette.background['paper'], alignItems: "center" }}>

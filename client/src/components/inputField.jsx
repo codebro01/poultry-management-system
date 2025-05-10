@@ -1,16 +1,30 @@
-import React, {useCallback} from 'react';
-import {Box, Typography, InputLabel, MenuItem, FormControl, Select, Button} from '@mui/material';
+import React, { useCallback } from 'react'
+import {
+  Box,
+  TextField,
+  Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Button,
+} from '@mui/material'
 
-
-export const InputField = ({input, value, name, label, setInput, fieldName, dropdownItems = []}) => {
-        console.log(dropdownItems)
-        const handleSetInput = useCallback(function (e) {
-          const { name, value } = e.target
-          console.log(name, value)
-          setInput((prevInputs) => {
-            return setInput({ ...prevInputs, [name]: value })
-          })
-        }, [])
+export const SelectField = ({
+  input,
+  value,
+  name,
+  label,
+  setInput,
+  fieldName,
+  dropdownItems = [],
+}) => {
+  const handleSetInput = useCallback(function (e) {
+    const { name, value } = e.target
+    setInput((prevInputs) => {
+      return setInput({ ...prevInputs, [name]: value })
+    })
+  }, [])
   return (
     <FormControl fullWidth>
       <InputLabel
@@ -45,5 +59,49 @@ export const InputField = ({input, value, name, label, setInput, fieldName, drop
           })}
       </Select>
     </FormControl>
+  )
+}
+
+export const InputField = ({
+  input,
+  value,
+  name,
+  label,
+  setInput,
+  fieldName,
+  type,
+  
+}) => {
+  const handleSetInput = useCallback(function (e) {
+    const { name, value } = e.target
+    setInput((prevInputs) => {
+      return setInput({ ...prevInputs, [name]: value })
+    })
+  }, [])
+
+  return (
+    <TextField
+      fullWidth
+      name={name}
+      value={input && Number(value)}
+      id={name}
+      label={label}
+      type={type}
+      placeholder={fieldName}
+      slotProps={{
+        inputLabel: {
+          shrink: true,
+        },
+      }}
+      onChange={(e) => handleSetInput(e)}
+      sx={{
+        '& .MuiInputBase-root': {
+          height: 40, // sets the overall container height
+        },
+        '& input': {
+          padding: '10px 14px', // optional: reduce vertical padding
+        },
+      }}
+    />
   )
 }

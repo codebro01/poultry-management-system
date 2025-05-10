@@ -49,6 +49,7 @@ const App = () => {
                 overflowX: 'hidden',
                 maxWidth: '100%',
                 width: '100%',
+                // position: 'relative'
               }}
             >
               {
@@ -63,7 +64,7 @@ const App = () => {
                   paddingLeft: isCollasped ? '80px' : '270px',
                   transition: '0.3s',
                   paddingTop: '10px',
-                  position: 'relative',
+                  // position: 'relative',
                   width: {
                     xs: isCollasped ? '100%' : '650px',
                     sm: isCollasped ? '100%' : '100%',
@@ -123,6 +124,7 @@ const App = () => {
                     borderRadius: '50%',
                     background: 'transparent',
                     cursor: 'pointer',
+                    // display: 'none'
                   }}
                 >
                   {predictForm ? (
