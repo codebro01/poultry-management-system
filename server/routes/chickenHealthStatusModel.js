@@ -20,6 +20,8 @@ Router.route('/').post(async (req, res, next) => {
       for (const key in expectedTypes) {
         const expectedType = expectedTypes[key]
         const actualType = typeof inputs[key]
+        console.log(actualType)
+        console.log(req.body)
 
         if (actualType !== expectedType) {
           return `Invalid type for ${key}: expected ${expectedType}, got ${actualType}`

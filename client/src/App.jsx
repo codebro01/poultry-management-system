@@ -23,11 +23,13 @@ import { CartProvider } from './context/cartContext.jsx'
 import { CheckOutPage } from './pages/marketPlace/checkOutPage.jsx'
 import { PredictChickenHealthStatus } from './components/PredictChickenHealthStatus.jsx'
 
+
 const App = () => {
   const [isCollasped, setIsCollapsed] = useState(false)
   const [predictForm, setPredictForm] = useState(false)
   const handleSidebarToggle = () => setIsCollapsed(!isCollasped)
-  const path = getPath()
+  const path = getPath();
+  const [predictionResult, setPredictResult] = useState('');
 
   // path.includes("dashboard") ? console.log("admin") : console.log("user");
 
@@ -120,15 +122,35 @@ const App = () => {
                     right: '5%',
                     width: '100px',
                     height: '100px',
-                    // zIndex: "1000",
                     borderRadius: '50%',
-                    background: 'transparent',
                     cursor: 'pointer',
+                    ZIndex: 999,
                     // display: 'none'
                   }}
                 >
                   {predictForm ? (
-                    <PredictChickenHealthStatus setPredictForm = {setPredictForm} />
+                    predictionResult ? (
+                      <Typography
+                        sx = {{
+                          position: 'fixed', 
+                          right: "5%", 
+                          bottom: "5%", 
+                          background: theme.palette.secondary.main, 
+                          color: theme.palette.text.white, 
+                          padding: '10px', 
+                          borderRadius: '10px', 
+                          textAlign: "center", 
+                          width: {
+                            sm: "250px",
+                          }
+                        }}
+                      >{predictionResult}</Typography>
+                    ) : (
+                      <PredictChickenHealthStatus
+                        setPredictForm={setPredictForm}
+                        setPredictResult={setPredictResult}
+                      />
+                    )
                   ) : (
                     <Box
                       onClick={() => setPredictForm(!predictForm)}
@@ -144,6 +166,26 @@ const App = () => {
                     />
                   )}
                 </Box>
+
+                {/* {predictionResult && (
+                  <Box
+                    sx={{
+                      '&:before': {
+                        position: 'fixed',
+                        zIndex: 999999,
+                        content: '""',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        background: 'rgba(0, 0, 0,0.2)',
+                      },
+                    }}
+                  >
+                    
+
+                  </Box>
+                )} */}
               </Box>
             </Container>
           </Router>

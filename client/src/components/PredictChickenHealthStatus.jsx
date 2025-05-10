@@ -2,50 +2,73 @@ import React, {useState} from 'react';
 import {Box,Paper, Typography, InputLabel, MenuItem, FormControl, Select, Button} from '@mui/material';
 import { SelectField, InputField } from './inputField';
 import { useTheme } from '@mui/material';
-import { Axios } from 'axios';
+import axios from 'axios';
 
-export const PredictChickenHealthStatus = ({setPredictForm}) => {
-  const theme = useTheme();
-    const [input, setInput] = useState({
-        temperature: '', 
-        appetiteLevel: '', 
-        featherCondition: '', 
-        combColor: '', 
-        respiratoryRate: '', 
-        ageInWeeks: '', 
-        activityLevel: '', 
-        heartRate: '', 
+export const PredictChickenHealthStatus = ({ setPredictForm, setPredictResult }) => {
+  const theme = useTheme()
+  const PREDICTION_API_URL = `${import.meta.env.VITE_PREDICTION_API_URL}`
+  const [input, setInput] = useState({
+    temperature: '',
+    appetiteLevel: '',
+    featherCondition: '',
+    combColor: '',
+    respiratoryRate: '',
+    ageInWeeks: '',
+    activityLevel: '',
+    heartRate: '',
+  })
 
-    })
+  const appetiteLevelOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    featherConditionOptions = ['smooth', 'ruffled'],
+    combColorOptions = ['bright red', 'pale', 'bluish'],
+    heartRateOptions = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
+    respiratoryRateOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+    activityLevelOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    const appetiteLevelOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      featherConditionOptions = ['smooth', 'ruffled'],
-      combColorOptions = ['bright red', 'pale', 'bluish'], 
-      heartRateOptions = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500], 
-      respiratoryRateOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100], 
-      activityLevelOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  
-
-    const handlePredictSubmit = async function (e) {
-      e.preventDefault();
-      const response = await axios.post(`${}`)
-    }
-
-    const formattedInput = () => {
-    if(input) {
-      const { temperature, ageInWeeks } = input
+  const formattedInput = () => {
+    if (input) {
+      const {
+        temperature,
+        ageInWeeks,
+        appetiteLevel,
+        heartRate,
+        respiratoryRate,
+        activityLevel,
+      } = input
 
       return {
         ...input,
         temperature: Number(temperature),
         ageInWeeks: Number(ageInWeeks),
+        appetiteLevel: Number(appetiteLevel),
+        heartRate: Number(heartRate),
+        respiratoryRate: Number(respiratoryRate),
+        activityLevel: Number(activityLevel),
       }
     }
-    }
- 
-    console.log(formattedInput())
-      
-      
+  }
+
+  console.log(formattedInput())
+
+  const handlePredictSubmit = async function (e) {
+    e.preventDefault()
+   try {
+    const data = formattedInput()
+    const response = await axios.post(
+      `${PREDICTION_API_URL}/api/v1/predict`,
+      data
+    )
+    console.log(response)
+    setPredictResult(response?.data?.response)
+    setTimeout(() => setPredictResult(''), 5000)
+   }
+   catch(err) {
+    console.log(err.response?.statusText);
+      setPredictResult(err.response?.statusText);
+      setTimeout(() => setPredictResult(''), 5000)
+   }
+  }
+
   return (
     <Paper component={'paper'} elevation={6}>
       <Box
@@ -57,12 +80,18 @@ export const PredictChickenHealthStatus = ({setPredictForm}) => {
           bottom: '5%',
           maxHeight: '500px',
           height: 'auto',
-          width: '300px',
-          background: theme.palette.background.default,
+          width: {
+            sm: '250px',
+            md: '300px',
+          },
+          background: '#fff',
           padding: '10px',
           borderRadius: '5px',
+          ZIndex: 999,
+
           display: 'flex',
           flexDirection: 'column',
+          border: `2px solid ${theme.palette.primary.main}`,
           gap: '15px',
           overflowY: 'scroll',
           boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.2)',

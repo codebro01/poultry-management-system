@@ -1,4 +1,4 @@
-import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +12,6 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"; // >
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import React, { useState } from 'react'
 import { Box } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
