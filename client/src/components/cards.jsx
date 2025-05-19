@@ -26,7 +26,8 @@ export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIc
             width: "100%",
             minHeight:"auto !important",
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center", 
+            boxShadow: "2px 2px 5px 2px rgba(0,0,0,0.2)"
         }}>
             <Box sx={{display: "flex", justifyContent:"left", alignItems: "left", flexDirection: "column", gap:"10px"}}>
                 <Typography variant='h5' color={theme.palette.text.secondary} >{subTitle}</Typography>
@@ -34,8 +35,10 @@ export function StatBox({ title, subTitle, bottomText, iconText, icon, statBoxIc
                 <Box sx={{display: "flex", justifyContent:"flex-start", alignItems: "center", gap:"10px"}}>
                     <Box>{iconText}</Box>
                     <Typography sx={{
-                        color: theme.palette.text.darkGrey, 
-                        fontSize: "12px"
+                        color: theme.palette.text.black, 
+                        fontSize: "12px", 
+                        fontWeight: 600, 
+                        opacity: 0.4
                     }}>{bottomText}</Typography>
                 </Box>
             </Box>

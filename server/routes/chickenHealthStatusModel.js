@@ -36,7 +36,10 @@ Router.route('/').post(async (req, res, next) => {
       return res.status(400).json({ error: typeError })
     }
 
-    const response = await axios.post(`http://localhost:5000/predict`, req.body)
+    const response = await axios.post(
+      `https://chicken-health-status-ml-script.onrender.com/`,
+      req.body
+    )
     res.status(200).json({ response: response?.data?.prediction })
   } catch (err) {
     return next(err)

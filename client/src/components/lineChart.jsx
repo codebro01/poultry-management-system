@@ -25,14 +25,25 @@ export const LineChart = ({ title, chartData = [], categories = [] }) => {
   };
 
   return (
-    <Card sx={{ borderRadius: "12px", boxShadow: "none", padding: "16px" }}>
+    <Card
+      sx={{
+        borderRadius: '12px',
+        padding: '16px',
+        boxShadow: '2px 2px 5px 2px rgba(0,0,0,0.2)',
+      }}
+    >
       <CardContent>
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
-        <ReactApexChart options={chartOptions} series={chartData} type="line" height={300} />
+        <ReactApexChart
+          options={chartOptions}
+          series={chartData}
+          type="line"
+          height={300}
+        />
       </CardContent>
     </Card>
-  );
+  )
 };
 

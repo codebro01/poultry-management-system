@@ -122,35 +122,106 @@ export const Dashboard = () => {
   
 
   return (
-
-    <Box marginTop={3} width={"100%"} paddingBottom={30}>
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 10 }} width={"100%"}>
-        <Grid container size={{ xs: 12, md: 12, lg: 8, }}>
-          <Grid size={{ xs: 12, md: 6, lg: 6, }} >
-            <StatBox loading={loading} title={(totalProfit || 'N/A')} subTitle={'Total Profit'} bottomText={"Yearly Return"} icon={<FaDollarSign />} iconText={<Box width={10} height={10} borderRadius={'50%'} bgcolor={theme.palette.secondary.main}></Box>} statBoxIconBgColor={theme.palette.secondary.main} />
+    <Box marginTop={3} width={'100%'} paddingBottom={30}>
+      <Grid
+        container
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 10 }}
+        width={'100%'}
+      >
+        <Grid container size={{ xs: 12, md: 12, lg: 8 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+            <StatBox
+              loading={loading}
+              title={totalProfit || 'N/A'}
+              subTitle={'Total Profit'}
+              bottomText={'Yearly Return'}
+              icon={<FaDollarSign />}
+              iconText={
+                <Box
+                  width={10}
+                  height={10}
+                  borderRadius={'50%'}
+                  bgcolor={theme.palette.secondary.main}
+                ></Box>
+              }
+              statBoxIconBgColor={theme.palette.secondary.main}
+            />
           </Grid>
-          <Grid size={{ xs: 12, md: 6, lg: 6, }}>
-            <StatBox loading={loading} title={totalOrdersAmount} subTitle={'Total Orders'} bottomText={"Pending"} icon={<ShoppingCartIcon />} iconText={<Box width={10} height={10} borderRadius={'50%'} bgcolor={theme.palette.primary.main}></Box>} statBoxIconBgColor={theme.palette.primary.main} />
+          <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+            <StatBox
+              loading={loading}
+              title={totalOrdersAmount}
+              subTitle={'Total Orders'}
+              bottomText={'Pending'}
+              icon={<ShoppingCartIcon />}
+              iconText={
+                <Box
+                  width={10}
+                  height={10}
+                  borderRadius={'50%'}
+                  bgcolor={theme.palette.primary.main}
+                ></Box>
+              }
+              statBoxIconBgColor={theme.palette.primary.main}
+            />
           </Grid>
           <Grid size={12}>
-            <PoultryReportCard loading = {loading} icon={<GiChicken size={30} style={{ marginRight: "16px", color: theme.palette.primary.main }} />} data={chickenReport} color={theme.palette.primary.main}  />
+            <PoultryReportCard
+              loading={loading}
+              icon={
+                <GiChicken
+                  size={30}
+                  style={{
+                    marginRight: '16px',
+                    color: theme.palette.primary.main,
+                  }}
+                />
+              }
+              data={chickenReport}
+              color={theme.palette.primary.main}
+            />
           </Grid>
           <Grid size={12}>
-            <PoultryReportCard icon={<EggIcon sx={{ fontSize: 40, marginRight: "16px", color: theme.palette.secondary.main }} />} data={eggsReport} color={theme.palette.secondary.main} />
+            <PoultryReportCard
+              icon={
+                <EggIcon
+                  sx={{
+                    fontSize: 40,
+                    marginRight: '16px',
+                    color: theme.palette.secondary.main,
+                  }}
+                />
+              }
+              data={eggsReport}
+              color={theme.palette.secondary.main}
+            />
           </Grid>
         </Grid>
-        <Grid size={{ xs: 12, md: 12, lg: 4, }} sx={{
-          marginTop: {
-            sm: "20px", lg: 0
-          }
-        }} bgcolor={theme.palette.background.paper} paddingBottom={3} position={'relative'}>
+        <Grid
+          size={{ xs: 12, md: 12, lg: 4 }}
+          sx={{
+            marginTop: {
+              sm: '20px',
+              lg: 0,
+              boxShadow: '2px 2px 5px 2px rgba(0,0,0,0.2)',
+              borderRadius: '10px',
+            },
+          }}
+          bgcolor={theme.palette.background.paper}
+          paddingBottom={3}
+          position={'relative'}
+        >
           <OrderCard orders={loading ? [] : orders} />
         </Grid>
-
       </Grid>
       <Grid container marginTop={7}>
         <Grid size={12}>
-          <LineChart title="Poultry Production Analysis" chartData={chartData} categories={categories} />
+          <LineChart
+            title="Poultry Production Analysis"
+            chartData={chartData}
+            categories={categories}
+          />
         </Grid>
       </Grid>
     </Box>

@@ -7,22 +7,41 @@ import {CircularProgress} from "@mui/material";
 export const PoultryReportCard = ({ icon, data, color, loading}) => {
     const theme = useTheme();
   return (
-    <Card sx={{ display: "flex", alignItems: "center", padding: "16px", borderRadius: "12px", background: theme.palette.background.paper, boxShadow: "none" }}>
+    <Card
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '16px',
+        borderRadius: '12px',
+        background: theme.palette.background.paper,
+        boxShadow: '2px 2px 5px 2px rgba(0,0,0,0.2)',
+      }}
+    >
       {/* Left Section - Dynamic Icon */}
       {icon}
 
       {/* Right Section - Report Data */}
-      <CardContent sx={{ flex: 1, padding: "0" }}>
+      <CardContent sx={{ flex: 1, padding: '0' }}>
         <Grid container spacing={2}>
           {data.map((item, index) => (
-            <Grid item size={{xs: 6, sm: 4}} key={index} >
-              <Typography variant="subtitle2" color="text.secondary">{item.label}</Typography>
-              <Box>{loading ? <CircularProgress size={24}/> : <Typography variant="h6" fontWeight="bold">{item.value}</Typography>}</Box>
+            <Grid item size={{ xs: 6, sm: 4 }} key={index}>
+              <Typography variant="subtitle2" color="text.secondary">
+                {item.label}
+              </Typography>
+              <Box>
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <Typography variant="h6" fontWeight="bold">
+                    {item.value}
+                  </Typography>
+                )}
+              </Box>
             </Grid>
           ))}
         </Grid>
       </CardContent>
     </Card>
-  );
+  )
 };
 
