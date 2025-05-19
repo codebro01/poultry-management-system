@@ -19,50 +19,50 @@ export const SelectField = ({
   fieldName,
   dropdownItems = [],
 }) => {
-  const handleSetInput = useCallback(function (e) {
+  const handleSetInput = (e) => {
     const { name, value } = e.target
-    setInput((prevInputs) => {
-      return setInput({ ...prevInputs, [name]: value })
-    })
-  }, [])
-  return (
-    <FormControl fullWidth>
-      <InputLabel
-        id="demo-simple-select-label"
-        sx={{
-          top: '-6px', // adjust as needed
-          fontSize: '0.875rem',
-          
-        }}
-      >
-        {fieldName}
-      </InputLabel>
-      <Select
-        name={name}
-        labelId={`Chicken ${name}`}
-        id={name}
-        value={input && value}
-        label={label}
-        required
-        onChange={(e) => handleSetInput(e)}
-        sx={{
-          height: 40,
-        }}
-      >
-        {dropdownItems &&
-          dropdownItems.map((item, index) => {
-            if (Array.isArray(dropdownItems)) {
-              return (
-                <MenuItem key={index++} value={item?.value || item}>
-                  {item?.name || item}
-                </MenuItem>
-              )
-            }
-          })}
-      </Select>
-    </FormControl>
-  )
-}
+    setInput((prevInputs) => ({ ...prevInputs, [name]: value }))
+    }
+
+    return (
+      <FormControl fullWidth>
+        <InputLabel
+          id="demo-simple-select-label"
+          sx={{
+            top: '-6px', // adjust as needed
+            fontSize: '0.875rem',
+            
+          }}
+        >
+          {fieldName}
+        </InputLabel>
+        <Select
+          name={name}
+          labelId={`Chicken ${name}`}
+          id={name}
+          value={input && value}
+          label={label}
+          required
+          onChange={(e) => handleSetInput(e)}
+          sx={{
+            height: 40,
+          }}
+        >
+          {dropdownItems &&
+            dropdownItems.map((item, index) => {
+              if (Array.isArray(dropdownItems)) {
+                return (
+                  <MenuItem key={index++} value={item?.value || item}>
+                    {item?.name || item}
+                  </MenuItem>
+                )
+              }
+            })}
+        </Select>
+      </FormControl>
+    )
+  }
+
 
 export const InputField = ({
   input,
@@ -74,12 +74,11 @@ export const InputField = ({
   type,
   
 }) => {
-  const handleSetInput = useCallback(function (e) {
+  const handleSetInput = (e) => {
     const { name, value } = e.target
-    setInput((prevInputs) => {
-       return { ...prevInputs, [name]: value }
-    })
-  }, [])
+    setInput((prevInputs) => ({ ...prevInputs, [name]: value }))
+  }
+    
 
   return (
     <TextField
