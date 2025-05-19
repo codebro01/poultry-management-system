@@ -77,7 +77,7 @@ export const InputField = ({
   const handleSetInput = useCallback(function (e) {
     const { name, value } = e.target
     setInput((prevInputs) => {
-      return setInput({ ...prevInputs, [name]: value })
+       return { ...prevInputs, [name]: value }
     })
   }, [])
 
