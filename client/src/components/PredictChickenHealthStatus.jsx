@@ -225,7 +225,7 @@ export const PredictChickenHealthStatus = ({ setPredictForm, setPredictResult })
             marginTop: 'auto',
           }}
         >
-          {loading ? (<CircularPogress/>) : 'Predict'}
+          {loading ? (<CircularProgress/>) : 'Predict'}
         </Button>
         <Button
           onClick={() => setPredictForm(false)}
