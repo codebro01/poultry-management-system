@@ -37,7 +37,8 @@ Router.route('/').post(async (req, res, next) => {
     }
 
     const response = await axios.post(
-      `https://chicken-health-status-ml-script.onrender.com/`,
+      // `http://localhost:5000/predict`,
+      `https://chicken-health-status-ml-script.onrender.com/predict`,
       req.body
     )
     res.status(200).json({ response: response?.data?.prediction })

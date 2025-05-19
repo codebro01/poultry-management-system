@@ -43,6 +43,7 @@ export const SelectField = ({
         id={name}
         value={input && value}
         label={label}
+        required
         onChange={(e) => handleSetInput(e)}
         sx={{
           height: 40,
@@ -89,6 +90,7 @@ export const InputField = ({
       label={label}
       type={type}
       placeholder={fieldName}
+      required
       slotProps={{
         inputLabel: {
           shrink: true,
