@@ -21,7 +21,8 @@ import { ProductsPage } from './pages/marketPlace/products'
 import { ResponsiveAppBar } from './components/AppBar'
 import { CartProvider } from './context/cartContext.jsx'
 import { CheckOutPage } from './pages/marketPlace/checkOutPage.jsx'
-import { PredictChickenHealthStatus } from './components/PredictChickenHealthStatus.jsx'
+import { PredictChickenHealthStatus } from './components/PredictChickenHealthStatus.jsx';
+import { RobotIcon } from './components/RobotIcon.jsx'
 
 
 const App = () => {
@@ -152,18 +153,7 @@ const App = () => {
                       />
                     )
                   ) : (
-                    <Box
-                      onClick={() => setPredictForm(!predictForm)}
-                      component="img"
-                      src="/Robot.png"
-                      alt="Robot.png"
-                      sx={{
-                        height: '100%',
-                        width: '100%',
-                        borderRadius: '50%',
-                        padding: '10px',
-                      }}
-                    />
+                    <RobotIcon setPredictForm={setPredictForm} predictForm={predictForm}/>
                   )}
                 </Box>
 
