@@ -3,10 +3,12 @@ import {Box,Paper, Typography, InputLabel, MenuItem, FormControl, Select, Button
 import { SelectField, InputField } from './inputField';
 import { useTheme } from '@mui/material';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const PredictChickenHealthStatus = ({ setPredictForm, setPredictResult }) => {
   const theme = useTheme()
   const PREDICTION_API_URL = `${import.meta.env.VITE_PREDICTION_API_URL}`
+  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState({
     temperature: '',
     appetiteLevel: '',
@@ -53,17 +55,21 @@ export const PredictChickenHealthStatus = ({ setPredictForm, setPredictResult })
   const handlePredictSubmit = async function (e) {
     e.preventDefault()
    try {
+    setLoading(true)
     const data = formattedInput()
     const response = await axios.post(
       `${PREDICTION_API_URL}/api/v1/predict`,
       data
     )
     console.log(response)
+    setLoading(false);
     setPredictResult(response?.data?.response)
+  
     setTimeout(() => setPredictResult(''), 5000)
    }
    catch(err) {
     console.log(err.response?.statusText);
+    setLoading(false)
       setPredictResult(err.response?.statusText);
       setTimeout(() => setPredictResult(''), 5000)
    }
@@ -219,7 +225,7 @@ export const PredictChickenHealthStatus = ({ setPredictForm, setPredictResult })
             marginTop: 'auto',
           }}
         >
-          Predict
+          {loading ? (<CircularPogress/>) : 'Predict'}
         </Button>
         <Button
           onClick={() => setPredictForm(false)}
