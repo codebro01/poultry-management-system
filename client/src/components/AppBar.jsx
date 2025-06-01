@@ -223,7 +223,7 @@ export function ResponsiveAppBar() {
                     right: '-10px',
                     fontSize: '11px',
                     fontWeight: 700,
-                    color: theme.palette.text.white,
+                    color: theme.palette.primary.main
                   }}
                 >
                   {cart.length}
