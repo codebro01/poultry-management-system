@@ -8,79 +8,81 @@ import "@fontsource/poppins/500.css"; // Medium
 import "@fontsource/poppins/700.css"; // Bold
 
  let theme = createTheme({
-  palette: {
-    primary: {
-      main: "#FFA500", // Golden Yellow
-    },
-    secondary: {
-      main: "#2E7D32", // Deep Green
-      light: "#73B376;"
-    },
-    background: {
-      default: "#FFF8E1", // Soft Beige
-      paper: "#ffffff",
-    },
-    error: {
-      main: "#D32F2F", // Reddish Brown
-    },
-    text: {
-      primary: "#333333", // Dark grey for readability
-      secondary: "#555555",
-      white: "#f5f5f5", 
-      darkGrey: "rgb(244, 244, 244)",
-    },
-  },
-  typography: {
-    fontFamily: "Poppins, sans-serif",
-    h1: {
-      fontSize: "2.5rem",
-      fontWeight: 900,
-    },
-    h2: {
-      fontSize: "2rem",
-      fontWeight: 700,
-      
-    },
-    h3: {
-      fontSize: "1.85rem",
-      fontWeight: 600,
-    },
-    h4: {
-      fontSize: "1.6rem",
-      fontWeight: 500,
-    },
-    h5: {
-      fontSize: "1.4rem",
-      fontWeight: 500,
-    },
-    body1: {
-      fontSize: "1rem",
-    },
-    button: {
-      fontWeight: 500,
-      textTransform: "none", // Optional: Prevent uppercase transformation
-      fontSize: "0.6rem", // Default font size
-      "@media (min-width:690px)": { // Small screens (tablets)
-        fontSize: "0.9rem",
-      },
-      "@media (min-width:960px)": { // Medium screens (desktops)
-        fontSize: "1rem",
-      },
-      "@media (min-width:1280px)": { // Large screens
-        fontSize: "1.1rem",
-      },
-    },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,    // Extra small devices (phones)
-      sm: 690,  // Small devices (tablets)
-      md: 960,  // Medium devices (desktops)
-      lg: 1280, // Large devices (wider screens)
-      xl: 1920, // Extra large screens
-    },
-  },
-});
+   palette: {
+     primary: {
+       main: '#FFA500', // Golden Yellow
+     },
+     secondary: {
+       main: '#2E7D32', // Deep Green
+       light: '#73B376;',
+     },
+     background: {
+       default: '#FFF8E1', // Soft Beige
+       paper: '#ffffff',
+     },
+     error: {
+       main: '#D32F2F', // Reddish Brown
+     },
+     text: {
+       primary: '#333333', // Dark grey for readability
+       secondary: '#555555',
+       white: '#f5f5f5',
+       darkGrey: 'rgb(244, 244, 244)',
+     },
+   },
+   typography: {
+     fontFamily: 'Poppins, sans-serif',
+     h1: {
+       fontSize: '2.5rem',
+       fontWeight: 900,
+     },
+     h2: {
+       fontSize: '2rem',
+       fontWeight: 700,
+     },
+     h3: {
+       fontSize: '1.85rem',
+       fontWeight: 600,
+     },
+     h4: {
+       fontSize: '1.6rem',
+       fontWeight: 500,
+     },
+     h5: {
+       fontSize: '1.4rem',
+       fontWeight: 500,
+     },
+     body1: {
+       fontSize: '1rem',
+     },
+     button: {
+       fontWeight: 500,
+       textTransform: 'none', // Optional: Prevent uppercase transformation
+       fontSize: '0.6rem', // Default font size
+       '@media (min-width:690px)': {
+         // Small screens (tablets)
+         fontSize: '0.9rem',
+       },
+       '@media (min-width:960px)': {
+         // Medium screens (desktops)
+         fontSize: '1rem',
+       },
+       '@media (min-width:1280px)': {
+         // Large screens
+         fontSize: '1.1rem',
+       },
+     },
+   },
+   breakpoints: {
+     values: {
+       xs: 0, // Extra small devices (phones)
+       sm: 690, // Small devices (tablets)
+       md: 960, // Medium devices (desktops)
+       lg: 1280, // Large devices (wider screens)
+       xl: 1920, // Extra large screens
+     },
+   },
+ })
 theme = responsiveFontSizes(theme, {
   breakpoints: ["xs", "sm", "md", "lg", "xl"], // Define custom breakpoints
   factor: 5, // Increase/decrease scaling effect (default is 2)

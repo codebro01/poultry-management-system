@@ -29,7 +29,11 @@ html {
 }
 
 .css-ivkceb-MuiContainer-root {
-  background-color: var(--secondary);
+  background-color: var(--whiteText);;
+}
+
+.bg-white {
+  background-color: var(--whiteText);
 }
 .css-2mc04x-MuiTypography-root {
   color: var(--whiteText);

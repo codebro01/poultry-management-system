@@ -43,17 +43,41 @@ export function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const [scrolled, setScrolled] = React.useState(false)
+
+  React.useEffect(() => {
+    const scrollContainer = document.getElementById('main-content')
+
+    const handleScroll = () => {
+      console.log('scrollTop:', scrollContainer.scrollTop)
+      setScrolled(scrollContainer.scrollTop > 400)
+    }
+
+    scrollContainer.addEventListener('scroll', handleScroll)
+    return () => scrollContainer.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  console.log(scrolled)
+
   return (
-    <AppBar sx={{
-      backgroundColor: theme.palette.secondary.main,
-      position: "fixed", 
-      display: authPage ? 'none' : "flex",
-    }}>
-      <Container maxWidth="xl" >
-        <Toolbar disableGutters sx={{
-          display: "flex",
-          justifyContent: "space-around"
-        }}>
+    <AppBar
+
+    sx={{
+        backgroundColor: 'transparent',
+        position: 'fixed',
+        display: authPage ? 'none' : 'flex',
+        shadow: 0, 
+      }}
+      className={scrolled && 'bg-white'}
+    >
+      <Container maxWidth="xl">
+        <Toolbar
+          disableGutters
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}
+        >
           {/* <AdbIcon sx={{ display: { xs: display= "flex" justifyContent= {"space-around"}'none', md: 'flex' }, mr: 1 }} /> */}
           {/* <Typography
             variant="h6"
@@ -75,23 +99,30 @@ export function ResponsiveAppBar() {
           <Typography
             variant="h3"
             sx={{
-              color: theme.palette.text.white, // Use primary theme color
+              color: theme.palette.primary.main, // Use primary theme color
               fontWeight: 900, // Extra bold
               letterSpacing: 2, // Space out letters
-              textTransform: "uppercase", // Uppercase for a strong look
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", // Soft shadow effect
+              textTransform: 'uppercase', // Uppercase for a strong look
               display: {
-                xs: "none",
-                md: "flex",
-                width: "60%"
-              }
+                xs: 'none',
+                md: 'flex',
+                width: '60%',
+              },
             }}
-
           >
             wura ola poultry farm
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none', justifyContent: "space-around" } }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: {
+                xs: 'flex',
+                md: 'none',
+                justifyContent: 'space-around',
+              },
+            }}
+          >
             <IconButton
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -99,7 +130,7 @@ export function ResponsiveAppBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon sx={{ color: theme.palette.text.white }} />
+              <MenuIcon sx={{ color: theme.palette.primary.main }} />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -119,41 +150,53 @@ export function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={"/"}>                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  <Link to={'/'}>
+                    {' '}
+                    <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                   </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
 
-
-
-
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h3"
             sx={{
-              color: theme.palette.text.white, // Use primary theme color
+              color: theme.palette.primary.main, // Use primary theme color
               fontWeight: 900, // Extra bold
               letterSpacing: 2, // Space out letters
-              textTransform: "uppercase", // Uppercase for a strong look
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", // Soft shadow effect
+              textTransform: ' rgba(0, 0, 0, 0.3)', // Soft shadow effect
               display: {
-                xs: "flex",
-                md: "none",
-                textAlign: "center"
-              }
+                xs: 'flex',
+                md: 'none',
+                textAlign: 'center',
+              },
             }}
-
           >
             wura ola poultry farm
           </Typography>
-          <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex', justifyContent: "space-around", width: "100%" } }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: {
+                xs: 'none',
+                md: 'flex',
+                justifyContent: 'space-around',
+                width: '100%',
+              },
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', background: theme.palette.secondary.light }}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: 'block',
+                  background: theme.palette.primary.main,
+                }}
               >
                 {page}
               </Button>
@@ -161,25 +204,30 @@ export function ResponsiveAppBar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Click to Checkout">
-              <IconButton sx={{
-                position: 'relative',
-                p: 0
-              }} onClick={handleOpenUserMenu}
-
+              <IconButton
+                sx={{
+                  position: 'relative',
+                  p: 0,
+                }}
+                onClick={handleOpenUserMenu}
               >
                 <Badge color="error">
-                  <ShoppingCart sx={{ color: theme.palette.text.white }} />
+                  <ShoppingCart sx={{ color: theme.palette.primary.main }} />
                 </Badge>
-                <Typography sx={{
-                  position: "absolute",
-                  // background: "red", 
-                  padding: "1px 5px",
-                  top: "-10px",
-                  right: "-10px",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: theme.palette.text.white
-                }}>{cart.length}</Typography>
+                <Typography
+                  sx={{
+                    position: 'absolute',
+                    // background: "red",
+                    padding: '1px 5px',
+                    top: '-10px',
+                    right: '-10px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: theme.palette.text.white,
+                  }}
+                >
+                  {cart.length}
+                </Typography>
               </IconButton>
             </Tooltip>
             <Menu
@@ -200,7 +248,11 @@ export function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Link to={'/checkout'}><Typography sx={{ textAlign: 'center' }}>{setting}</Typography></Link>
+                  <Link to={'/checkout'}>
+                    <Typography sx={{ textAlign: 'center' }}>
+                      {setting}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -208,5 +260,5 @@ export function ResponsiveAppBar() {
         </Toolbar>
       </Container>
     </AppBar>
-  );
+  )
 }
